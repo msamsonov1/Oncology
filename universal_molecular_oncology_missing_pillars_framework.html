@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Molecular Oncology & Missing Pillars Framework</title>
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-panel: #0b1329;
+      --bg-card: #101c3d;
+      --border-line: #1e293b;
+      --border-glow: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --gold-phys: #f59e0b;
+      --cyan-opto: #06b6d4;
+      --emerald-crispr: #10b981;
+      --purple-mirna: #c084fc;
+      --blue-repair: #3b82f6;
+      --rose-yamanaka: #f43f5e;
+      --indigo-rnai: #818cf8;
+      --pink-mrna: #ec4899;
+      --amber-foxp3: #fbbf24;
+      --green-check: #22c55e;
+      --teal-protac: #14b8a6;
+      --red-cancer: #ef4444;
+      --orange-persister: #f97316;
+      --indigo-bbb: #6366f1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      min-height: 100vh;
+      line-height: 1.45;
+      padding-bottom: 40px;
+    }
+
+    .wrapper {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    header {
+      background: rgba(11, 19, 41, 0.95);
+      border-bottom: 1px solid var(--border-line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      padding: 12px 0;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-primary {
+      background: linear-gradient(135deg, #f59e0b, #ec4899, #06b6d4);
+      color: #000;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .title-area h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .title-area p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .header-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #020617;
+      border: 1px solid var(--border-glow);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+    }
+
+    .beacon {
+      width: 8px;
+      height: 8px;
+      background: var(--cyan-opto);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--cyan-opto);
+      animation: pulse-beacon 1.8s infinite;
+    }
+
+    @keyframes pulse-beacon {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    .card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .hub-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gold-phys);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Missing Pillars Banner Grid */
+    .missing-pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .pillar-box {
+      background: #090f20;
+      border: 1px solid var(--border-line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .pillar-box:hover {
+      border-color: #3b82f6;
+    }
+
+    .pillar-tag {
+      font-size: 9px;
+      font-weight: 800;
+      font-family: ui-monospace, monospace;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+    }
+
+    .pillar-head {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .pillar-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .sub-modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .sub-module-badge {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+    }
+
+    .sub-module-badge strong {
+      display: block;
+      color: #cbd5e1;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+
+    .controls-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .phase-indicator {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--red-cancer);
+      transition: color 0.3s;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    button:hover { background: #334155; }
+    button:active { transform: scale(0.97); }
+
+    .btn-run {
+      background: #4f46e5;
+      border-color: #6366f1;
+      color: #fff;
+    }
+    .btn-run:hover { background: #4338ca; }
+
+    /* Actuator Chips */
+    .actuators-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip-toggle {
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      padding: 5px 9px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .chip-toggle.active {
+      color: #fff;
+      border-color: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* Slider Bar */
+    .slider-container {
+      margin-top: 4px;
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 9px;
+      border-radius: 6px;
+      background: linear-gradient(to right, #ef4444 0%, #f59e0b 28%, #06b6d4 62%, #10b981 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #06b6d4;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.8);
+      cursor: grab;
+      transition: transform 0.1s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Narrative Box */
+    .narrative-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 6px;
+    }
+
+    .narrative-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .narrative-body {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .panes-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .panes-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .pane-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pane-card.healthy {
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .pane-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .pane-badge {
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .canvas-box {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      margin-top: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .legend-floating {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(11, 19, 43, 0.88);
+      border: 1px solid #334155;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    .legend-right {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(11, 19, 43, 0.88);
+      border: 1px solid #334155;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      color: var(--gold-phys);
+      pointer-events: none;
+    }
+
+    .steps-section {
+      margin-top: 14px;
+      background: #070d1e;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .steps-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1a2542;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: ui-monospace, monospace;
+    }
+
+    .steps-header.disease {
+      color: #f87171;
+    }
+
+    .steps-header.solution {
+      color: #34d399;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 4px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #020617;
+      border: 1px solid #172033;
+      border-radius: 8px;
+      padding: 9px 11px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .step-item:hover {
+      border-color: #334155;
+      transform: translateX(2px);
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      font-family: ui-monospace, monospace;
+      margin-top: 1px;
+    }
+
+    .step-num.disease {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+    }
+
+    .step-num.solution {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+    }
+
+    .step-content {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--text-muted);
+    }
+
+    .step-content strong {
+      color: var(--text-main);
+      display: inline;
+      margin-right: 4px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    .metric-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-line);
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .metric-name {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-family: ui-monospace, monospace;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-size: 15px;
+      font-weight: 800;
+      font-family: ui-monospace, monospace;
+      color: #fff;
+    }
+
+    /* Validation Pipeline Ribbon */
+    .pipeline-ribbon {
+      background: #020617;
+      border: 1px solid var(--border-line);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+    }
+
+    .pipeline-step-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--cyan-opto);
+      font-weight: 800;
+    }
+
+    .pipeline-arrow {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrapper header-content">
+      <div class="branding">
+        <div class="badge-primary">15 UNIFIED PILLARS</div>
+        <div class="title-area">
+          <h1>Universal Molecular Oncology & Missing Pillars Framework</h1>
+          <p>Tissue Penetration &bull; Adaptive Evolution &bull; Glutarimide PROTACs &bull; Systemic Multi-Vector In Vivo Delivery</p>
+        </div>
+      </div>
+      <div class="header-telemetry">
+        <div class="beacon"></div>
+        <span>Order Parameter: <strong id="headerQ">q = 0.00</strong></span>
+        <span style="color:var(--border-glow);">|</span>
+        <span>Stroma Pen: <strong id="headerStroma" style="color:var(--teal-protac);">14%</strong></span>
+        <span style="color:var(--border-glow);">|</span>
+        <span>DTP Persisters: <strong id="headerPersist" style="color:var(--orange-persister);">Active (42)</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrapper">
+
+    <section class="card">
+      <div class="hub-title">
+        <span>🧩 Integrating The Missing Pillars for Complete Cancer Resolution</span>
+        <span style="font-size:10px; color:var(--text-muted); font-family:ui-monospace, monospace;">Pillars I, II & III Validation Engine</span>
+      </div>
+
+      <div class="missing-pillars-grid">
+        <!-- Pillar I: Tissue Penetration & Delivery Engine -->
+        <div class="pillar-box" style="border-left: 3px solid var(--teal-protac);">
+          <div class="pillar-tag" style="background: rgba(20, 184, 166, 0.2); color: var(--teal-protac);">
+            <span>I. TISSUE PENETRATION & DRUG DELIVERY ENGINE</span>
+          </div>
+          <div class="pillar-head">Overcoming Dense Matrix & Biological Barriers</div>
+          <div class="pillar-desc">
+            Standard therapies bounce off impermeable fibrotic tissue and fail to reach CNS metastases. The delivery engine breaks physical shields to permit deep intra-tumoral penetration.
+          </div>
+          <div class="sub-modules">
+            <div class="sub-module-badge">
+              <strong>Barrier 1: Desmoplasia</strong>
+              Stroma-modulating nanoparticles & hyaluronidase enzymes digest dense collagen mesh to permit therapeutic diffusion.
+            </div>
+            <div class="sub-module-badge">
+              <strong>Barrier 2: Blood-Brain Barrier (BBB)</strong>
+              BBB-penetrating peptide vectors (transcytosis ligands) shuttle degraders and CAR-T platforms into sheltered brain metastases.
+            </div>
+          </div>
+        </div>
+
+        <!-- Pillar II: Overcoming Adaptive Evolution -->
+        <div class="pillar-box" style="border-left: 3px solid var(--orange-persister);">
+          <div class="pillar-tag" style="background: rgba(249, 115, 22, 0.2); color: var(--orange-persister);">
+            <span>II. OVERCOMING ADAPTIVE EVOLUTION</span>
+          </div>
+          <div class="pillar-head">Preventing Persister Relapse & Evolutionary Escape</div>
+          <div class="pillar-desc">
+            Maximum-dose chemotherapy wipes out sensitive cells, triggering the "competitive release" of drug-tolerant persister clones. Eco-dosing and persister-killers trap tumors in an inescapable fitness valley.
+          </div>
+          <div class="sub-modules">
+            <div class="sub-module-badge">
+              <strong>Dynamics 1: DTP Persisters</strong>
+              Non-mutational Drug-Tolerant Persisters are tracked and eliminated via ferroptosis inducers (GPX4) and chromatin remodelers.
+            </div>
+            <div class="sub-module-badge">
+              <strong>Dynamics 2: Evolutionary Trap</strong>
+              Adaptive Eco-Dosing maintains a stable drug-sensitive population that actively outcompetes and starves emergent resistant mutants.
+            </div>
+          </div>
+        </div>
+
+        <!-- Pillar III: Unified Delivery & Systemic Validation -->
+        <div class="pillar-box" style="border-left: 3px solid var(--purple-mirna);">
+          <div class="pillar-tag" style="background: rgba(192, 132, 252, 0.2); color: var(--purple-mirna);">
+            <span>III. UNIFIED DELIVERY & SYSTEMIC VALIDATION</span>
+          </div>
+          <div class="pillar-head">Engineered All-In-One Multi-Vector Living Platform</div>
+          <div class="pillar-desc">
+            Translates theoretical synergy into clinic: a single engineered living immune platform (All-in-One CAR-T/PROTAC/mRNA combo) targeting multiple cancer and tumor microenvironment receptors simultaneously.
+          </div>
+          <div class="sub-modules">
+            <div class="sub-module-badge">
+              <strong>Glutarimide PROTACs (RSF)</strong>
+              Non-toxic sulfur ligands bridge ubiquitinase to destroy essential oncoproteins without healthy cell toxicity.
+            </div>
+            <div class="sub-module-badge">
+              <strong>In Vivo Validation Pipeline</strong>
+              Complex Organoids &rarr; Humanized Patient Xenograft (PDX) &rarr; Multi-Vector Living Immune Platform &rarr; Cure.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Vivo Translational Pipeline Banner -->
+      <div class="pipeline-ribbon">
+        <div class="pipeline-step">
+          <span class="pipeline-step-badge">INPUT</span>
+          <span>Unified 15-Modality Framework</span>
+        </div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step">
+          <span class="pipeline-step-badge">EX VIVO</span>
+          <span>Complex Patient Organoids</span>
+        </div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step">
+          <span class="pipeline-step-badge">IN VIVO</span>
+          <span>Humanized PDX Mouse Model</span>
+        </div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step">
+          <span class="pipeline-step-badge">VEHICLE</span>
+          <span>Multi-Vector Living Immune Cell Platform</span>
+        </div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step">
+          <span class="pipeline-step-badge" style="background:#064e3b; color:#34d399; border-color:#047857;">OUTCOME</span>
+          <span style="color:#34d399; font-weight:800;">Complete Structural & Clinical Remission</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="controls-grid">
+        <div class="status-row">
+          <div>
+            <div style="font-size:10px; font-family:ui-monospace, monospace; color:var(--text-dim); text-transform:uppercase;">
+              System State Evolution &bull; Multimodal Vector Simulation
+            </div>
+            <div id="phaseDisplay" class="phase-indicator">
+              Phase 0: Frustrated High-Entropy State (Stage IV Metastatic Soup + Dense Desmoplasia)
+            </div>
+          </div>
+          <div class="button-group">
+            <button id="runBtn" class="btn-run">
+              <span id="runIcon">▶</span>
+              <span id="runLabel">Simulate Multi-Vector Restoration</span>
+            </button>
+            <button id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <!-- 15 Actuator Chips -->
+        <div>
+          <div style="font-size:10px; color:var(--text-muted); font-family:ui-monospace, monospace; margin-bottom:5px;">
+            Therapeutic & Biological Actuators (Click to toggle specific modules):
+          </div>
+          <div class="actuators-container">
+            <!-- New Missing Pillars Actuators -->
+            <span class="chip-toggle active" id="actStroma" style="color:var(--teal-protac);">🛡 Desmoplasia Stroma-Digest</span>
+            <span class="chip-toggle active" id="actBbb" style="color:var(--indigo-bbb);">🧠 BBB Peptide Transcytosis</span>
+            <span class="chip-toggle active" id="actPersist" style="color:var(--orange-persister);">🎯 DTP Persister Cleaver</span>
+            <span class="chip-toggle active" id="actEco" style="color:var(--gold-phys);">♟ Evolutionary Trap Eco-Dose</span>
+            <span class="chip-toggle active" id="actProtac" style="color:var(--teal-protac);">🔬 Glutarimide PROTACs (RSF)</span>
+            
+            <!-- Nobel Pillars -->
+            <span class="chip-toggle active" id="actOpto" style="color:var(--cyan-opto);">⚡ Opto 470nm (2026)</span>
+            <span class="chip-toggle active" id="actFoxp3" style="color:var(--amber-foxp3);">🛡 FOXP3 Treg Deplete (2025)</span>
+            <span class="chip-toggle active" id="actMirna" style="color:var(--purple-mirna);">🎛 microRNA Rheostat (2024)</span>
+            <span class="chip-toggle active" id="actMrna" style="color:var(--pink-mrna);">💉 Neoantigen mRNA (2023)</span>
+            <span class="chip-toggle active" id="actCrispr" style="color:var(--emerald-crispr);">✂ CRISPR-Cas9 (2020)</span>
+            <span class="chip-toggle active" id="actCheck" style="color:var(--green-check);">⚔ Anti-PD-1 Checkpoint (2018)</span>
+            <span class="chip-toggle active" id="actRepair" style="color:var(--blue-repair);">🧬 BER/NER Repair (2015)</span>
+            <span class="chip-toggle active" id="actYama" style="color:var(--rose-yamanaka);">🔄 Yamanaka Reset (2012)</span>
+          </div>
+        </div>
+
+        <!-- Slider -->
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span style="color:var(--red-cancer);">● Metastatic Soup &amp; Stroma (0%)</span>
+            <span style="color:var(--teal-protac);">Stroma Digested &amp; BBB Crossed (30%)</span>
+            <span style="color:var(--orange-persister);">DTP Persisters &amp; PROTAC Lysis (65%)</span>
+            <span style="color:var(--emerald-crispr);">Symmetrical Polarized Ground State (100%) ●</span>
+          </div>
+          <input type="range" id="stateSlider" min="0" max="100" value="0" step="0.2">
+        </div>
+
+        <!-- Narrative Bar -->
+        <div id="narrativeCard" class="narrative-box">
+          <div id="narrativeHead" class="narrative-title" style="color:var(--red-cancer);">
+            ● Dense Fibrotic Capsule &amp; Metastatic Seeding (High Shannon Entropy)
+          </div>
+          <div id="narrativeDetail" class="narrative-body">
+            Tumor cells reside in a frustrated spin glass energy landscape (Parisi 2021), encased in impermeable collagen stroma (Desmoplasia Barrier 1). Drug-tolerant persisters (DTPs) hide in hypoxic niches, and cerebral metastases remain shielded behind the blood-brain barrier.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="panes-grid">
+      <!-- Left Pane: Pristine Normal Target & Disease Progression Steps -->
+      <div class="pane-card healthy">
+        <div class="pane-header">
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#6ee7b7; font-family:ui-monospace, monospace; text-transform:uppercase;">
+              Left Pane: Healthy Ground State
+            </div>
+            <div style="font-size:10px; color:var(--text-muted);">
+              Cohesive Polarized Ductal Architecture &bull; Invariant Biological Target
+            </div>
+          </div>
+          <div class="pane-badge" style="color:#6ee7b7; border-color:rgba(16,185,129,0.4); background:rgba(16,185,129,0.1);">
+            ΔS = Min Entropy (q = 1.00)
+          </div>
+        </div>
+        <div class="canvas-box">
+          <canvas id="canvasLeft" width="600" height="380"></canvas>
+          <div class="legend-floating">Healthy Polarized Ductal Unit</div>
+        </div>
+
+        <!-- 6 Steps Under Left Pane: What Happens Before This Proposal (The Disease Process) -->
+        <div class="steps-section">
+          <div class="steps-header disease">
+            <span>⚠️ What Happens Before This Proposal (The Disease Process)</span>
+            <span style="font-size:9px; color:var(--text-dim);">6 STEPS &bull; PLAIN ENGLISH</span>
+          </div>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-num disease">1</div>
+              <div class="step-content">
+                <strong>Cancer cells break away from the breast:</strong> Aggressive triple-negative breast cancer cells change their surface properties and detach from the original tumor.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num disease">2</div>
+              <div class="step-content">
+                <strong>Tumor cells stick together in the bloodstream:</strong> The escaped cancer cells use a molecular glue called N-cadherin to form traveling clumps that survive far better than single cells.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num disease">3</div>
+              <div class="step-content">
+                <strong>Clumps travel to distant vital organs:</strong> These circulating cell clusters drift through the blood vessels and lodge into organs like the lungs, liver, and bones.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num disease">4</div>
+              <div class="step-content">
+                <strong>Tumors build a stiff, fibrous shield:</strong> As new tumors grow in these organs, they produce a dense network of connective tissue using proteins like fibronectin.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num disease">5</div>
+              <div class="step-content">
+                <strong>Blood vessels inside the tumor collapse:</strong> The stiff surrounding tissue builds up internal physical pressure that squeezes tiny blood vessels shut.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num disease">6</div>
+              <div class="step-content">
+                <strong>Standard drugs fail to work:</strong> Because the blood vessels are crushed, standard chemotherapy cannot reach the tumor, and the compressed cancer cells turn on internal shields and pumps to resist treatment.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Pane: Dynamic Multi-Vector Restoration Canvas & Proposal Solution Steps -->
+      <div id="paneRightCard" class="pane-card" style="border-color: rgba(239, 68, 68, 0.4);">
+        <div class="pane-header">
+          <div>
+            <div id="rightHeadText" style="font-size:12px; font-weight:800; color:#fca5a5; font-family:ui-monospace, monospace; text-transform:uppercase;">
+              Right Pane: Disordered Cancer Soup + Collagen Stroma
+            </div>
+            <div id="rightSubText" style="font-size:10px; color:var(--text-muted);">
+              Frustrated Network &bull; Stage IV Chemoresistant with DTP Persisters
+            </div>
+          </div>
+          <div id="rightBadgeText" class="pane-badge" style="color:#fca5a5; border-color:rgba(239,68,68,0.4); background:rgba(239,68,68,0.1);">
+            Entropy S = Max
+          </div>
+        </div>
+        <div class="canvas-box">
+          <canvas id="canvasRight" width="600" height="380"></canvas>
+          <div id="rightFloatLegend" class="legend-right">
+            Drag slider to restore order
+          </div>
+        </div>
+
+        <!-- 6 Steps Under Right Pane: How This Proposal Helps (The Solution) -->
+        <div class="steps-section">
+          <div class="steps-header solution">
+            <span>✨ How This Proposal Helps (The Targeted Solution)</span>
+            <span style="font-size:9px; color:var(--text-dim);">6 STEPS &bull; PLAIN ENGLISH</span>
+          </div>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-num solution">1</div>
+              <div class="step-content">
+                <strong>Breaks apart traveling cell clumps:</strong> The drug candidate (MTN-301) unglues circulating tumor clusters in the bloodstream so the individual cells are destroyed naturally by blood flow.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num solution">2</div>
+              <div class="step-content">
+                <strong>Softens the stiff tumor tissue:</strong> It cuts off the structural signals in established tumors, relaxing the rigid surrounding tissue and lowering internal pressure.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num solution">3</div>
+              <div class="step-content">
+                <strong>Reopens collapsed blood vessels:</strong> Relieving this physical tension allows crushed capillaries to reopen, increasing tumor blood flow by more than two and a half times.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num solution">4</div>
+              <div class="step-content">
+                <strong>Delivers chemotherapy directly inside the tumor:</strong> The reopened vessels let co-administered standard cancer drugs penetrate deep into the center of established tumors.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num solution">5</div>
+              <div class="step-content">
+                <strong>Turns off drug resistance mechanisms:</strong> Releasing the mechanical stress deactivates the cancer cells' internal survival proteins and shuts down the pumps that spit chemotherapy out.
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num solution">6</div>
+              <div class="step-content">
+                <strong>Protects normal blood clotting:</strong> The treatment selectively targets the tumor tissue without interfering with normal blood platelets, avoiding dangerous bleeding side effects.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-name">Order Parameter (q)</div>
+        <div id="metricQ" class="metric-value" style="color:var(--red-cancer);">0.00</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Shannon Entropy (H)</div>
+        <div id="metricEntropy" class="metric-value" style="color:var(--red-cancer);">4.15 bits</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Stroma Permeability (I)</div>
+        <div id="metricStroma" class="metric-value" style="color:var(--teal-protac);">14%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">DTP Persister Lysis (II)</div>
+        <div id="metricPersist" class="metric-value" style="color:var(--orange-persister);">0%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">PROTAC Proteolysis (III)</div>
+        <div id="metricProtac" class="metric-value" style="color:var(--teal-protac);">0%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-name">Evolutionary Stability</div>
+        <div id="metricEco" class="metric-value" style="color:var(--gold-phys);">Trapped (Low)</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    (function() {
+      const EPITHELIAL_COUNT = 38;
+      const STROMA_COUNT = 24;
+      const PERSISTER_COUNT = 6;
+
+      const PHASES = [
+        {
+          min: 0,
+          title: "Phase 0: Frustrated High-Entropy State (Stage IV Metastatic Soup + Dense Desmoplasia)",
+          head: "● Dense Fibrotic Capsule & Metastatic Seeding (High Shannon Entropy)",
+          desc: "Cancer cells inhabit a frustrated spin glass energy landscape (Parisi 2021), surrounded by an impenetrable collagen matrix (Desmoplasia Barrier 1). Non-mutational Drug-Tolerant Persisters (DTPs) seed micro-metastases behind the Blood-Brain Barrier (Barrier 2).",
+          color: "#ef4444",
+          tag: "Entropy S = Max",
+          rightTitle: "Right Pane: Disordered Cancer Soup + Collagen Stroma",
+          rightSub: "Frustrated Network • Dense Matrix Barrier Active",
+          legend: "Dense Stroma Barrier Active"
+        },
+        {
+          min: 25,
+          title: "Phase 1: Stroma Digestion (Barrier 1) & BBB Peptide Transcytosis (Barrier 2)",
+          head: "● Stroma Permeabilization + BBB Crossing + 470nm Opto Repolarization",
+          desc: "Stroma-modulating nanoparticles dissolve dense collagen strands, restoring perfusion and drug access. Peptide vectors shuttle therapeutic payloads past the blood-brain barrier. 470nm light-gated ion channels repolarize bioelectric membrane potentials.",
+          color: "#06b6d4",
+          tag: "Barriers 1 & 2 Cleared",
+          rightTitle: "Right Pane: Perfusion Restored & BBB Penetration",
+          rightSub: "Matrix Permeabilized • Deep Vector Infiltration",
+          legend: "Stroma Digested • Vectors Penetrating"
+        },
+        {
+          min: 58,
+          title: "Phase 2: Glutarimide PROTAC Proteolysis, DTP Lysis & Evolutionary Trap",
+          head: "● Oncoprotein Degradation (RSF/Krasavin) + DTP Persister Cleavage + Eco-Dosing",
+          desc: "Glutarimide PROTACs tag essential cancer oncoproteins with ubiquitin ('the black spot') for proteasomal destruction. DTP persister-cleavers trigger ferroptosis in dormant niches, while adaptive eco-dosing traps emergent resistant subclones in a lethal competition trap.",
+          color: "#f59e0b",
+          tag: "PROTACs & Persister Trap Active",
+          rightTitle: "Right Pane: Targeted Lysis & Evolutionary Suppression",
+          rightSub: "Ubiquitin Tagging • DTP Extinction • Eco-Dosing",
+          legend: "PROTAC Ubiquitin Cascade Active"
+        },
+        {
+          min: 88,
+          title: "Phase 3: Symmetrical Ductal Ground State Reconstituted (q ≈ 1.00)",
+          head: "● Parisi Ground State Attractor (q = 1.00) + In Vivo Multi-Vector Remission",
+          desc: "Epigenetic memory is reset via Yamanaka factors and microRNA dials. Apical-basal polarity is restored, tight junctions lock, and the central duct lumen re-hollows. The system mirrors the pristine left pane in complete physiological homeostasis.",
+          color: "#10b981",
+          tag: "Entropy S = Minimum",
+          rightTitle: "Right Pane: Reconstituted Cohesive Architecture",
+          rightSub: "Complete Systemic Restoration • In Vivo Remission",
+          legend: "Ground State Restored (q = 1.00)"
+        }
+      ];
+
+      const canvasLeft = document.getElementById('canvasLeft');
+      const canvasRight = document.getElementById('canvasRight');
+      const ctxLeft = canvasLeft.getContext('2d');
+      const ctxRight = canvasRight.getContext('2d');
+
+      const slider = document.getElementById('stateSlider');
+      const headerQ = document.getElementById('headerQ');
+      const headerStroma = document.getElementById('headerStroma');
+      const headerPersist = document.getElementById('headerPersist');
+      const phaseDisplay = document.getElementById('phaseDisplay');
+      const narrativeCard = document.getElementById('narrativeCard');
+      const narrativeHead = document.getElementById('narrativeHead');
+      const narrativeDetail = document.getElementById('narrativeDetail');
+
+      const paneRightCard = document.getElementById('paneRightCard');
+      const rightHeadText = document.getElementById('rightHeadText');
+      const rightSubText = document.getElementById('rightSubText');
+      const rightBadgeText = document.getElementById('rightBadgeText');
+      const rightFloatLegend = document.getElementById('rightFloatLegend');
+
+      const metricQ = document.getElementById('metricQ');
+      const metricEntropy = document.getElementById('metricEntropy');
+      const metricStroma = document.getElementById('metricStroma');
+      const metricPersist = document.getElementById('metricPersist');
+      const metricProtac = document.getElementById('metricProtac');
+      const metricEco = document.getElementById('metricEco');
+
+      const runBtn = document.getElementById('runBtn');
+      const runIcon = document.getElementById('runIcon');
+      const runLabel = document.getElementById('runLabel');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const actuators = {
+        stroma: true,
+        bbb: true,
+        persist: true,
+        eco: true,
+        protac: true,
+        opto: true,
+        foxp3: true,
+        mirna: true,
+        mrna: true,
+        crispr: true,
+        check: true,
+        repair: true,
+        yama: true
+      };
+
+      const actConfig = [
+        { id: 'actStroma', key: 'stroma' },
+        { id: 'actBbb', key: 'bbb' },
+        { id: 'actPersist', key: 'persist' },
+        { id: 'actEco', key: 'eco' },
+        { id: 'actProtac', key: 'protac' },
+        { id: 'actOpto', key: 'opto' },
+        { id: 'actFoxp3', key: 'foxp3' },
+        { id: 'actMirna', key: 'mirna' },
+        { id: 'actMrna', key: 'mrna' },
+        { id: 'actCrispr', key: 'crispr' },
+        { id: 'actCheck', key: 'check' },
+        { id: 'actRepair', key: 'repair' },
+        { id: 'actYama', key: 'yama' }
+      ];
+
+      actConfig.forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', () => {
+            actuators[key] = !actuators[key];
+            el.classList.toggle('active', actuators[key]);
+          });
+        }
+      });
+
+      let isSimulating = false;
+      let animFrameId = null;
+
+      class CellAgent {
+        constructor(id, targetX, targetY, radius, angle, isStroma = false, isPersister = false) {
+          this.id = id;
+          this.targetX = targetX;
+          this.targetY = targetY;
+          this.radius = radius;
+          this.targetAngle = angle;
+          this.isStroma = isStroma;
+          this.isPersister = isPersister;
+
+          this.chaosX = 0;
+          this.chaosY = 0;
+          this.chaosRadius = radius * (0.8 + Math.random() * 0.7);
+          this.chaosAngle = Math.random() * Math.PI * 2;
+          this.wobblePhase = Math.random() * Math.PI * 2;
+        }
+
+        initDisorder(w, h) {
+          if (this.isStroma) {
+            this.chaosX = Math.random() * w;
+            this.chaosY = Math.random() * h;
+          } else if (this.isPersister) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 15 + Math.random() * (Math.min(w, h) * 0.28);
+            this.chaosX = (w / 2) + Math.cos(angle) * dist;
+            this.chaosY = (h / 2) + Math.sin(angle) * dist;
+          } else {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 30 + Math.random() * (Math.min(w, h) * 0.42);
+            this.chaosX = (w / 2) + Math.cos(angle) * dist;
+            this.chaosY = (h / 2) + Math.sin(angle) * dist;
+          }
+        }
+
+        updateBrownian(factor, w, h) {
+          if (factor < 0.95) {
+            const jitter = (1 - factor) * 1.5;
+            this.chaosX += (Math.random() - 0.5) * jitter;
+            this.chaosY += (Math.random() - 0.5) * jitter;
+
+            const pad = 20;
+            if (this.chaosX < pad) this.chaosX = pad;
+            if (this.chaosX > w - pad) this.chaosX = w - pad;
+            if (this.chaosY < pad) this.chaosY = pad;
+            if (this.chaosY > h - pad) this.chaosY = h - pad;
+          }
+        }
+
+        getInterpolated(factor) {
+          const t = factor < 0.5 ? 4 * factor * factor * factor : 1 - Math.pow(-2 * factor + 2, 3) / 2;
+          const x = this.chaosX + (this.targetX - this.chaosX) * t;
+          const y = this.chaosY + (this.targetY - this.chaosY) * t;
+          const r = this.chaosRadius + (this.radius - this.chaosRadius) * t;
+          return { x, y, r, t };
+        }
+      }
+
+      let cells = [];
+
+      function buildArchitecture() {
+        const w = canvasLeft.logicalWidth || 600;
+        const h = canvasLeft.logicalHeight || 380;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        cells = [];
+
+        for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+          const angle = (i / EPITHELIAL_COUNT) * Math.PI * 2;
+          const layerOffset = (i % 2 === 0) ? 0 : -8;
+          const dist = ductRadius + layerOffset;
+          const x = cx + Math.cos(angle) * dist;
+          const y = cy + Math.sin(angle) * dist;
+          const r = (ductRadius * 2 * Math.PI / EPITHELIAL_COUNT) * 0.92;
+
+          const cell = new CellAgent(i, x, y, r, angle, false, false);
+          cell.initDisorder(w, h);
+          cells.push(cell);
+        }
+
+        for (let j = 0; j < STROMA_COUNT; j++) {
+          const angle = (j / STROMA_COUNT) * Math.PI * 2;
+          const dist = ductRadius * 1.38 + Math.sin(angle * 5) * 8;
+          const x = cx + Math.cos(angle) * dist;
+          const y = cy + Math.sin(angle) * dist;
+
+          const cell = new CellAgent(EPITHELIAL_COUNT + j, x, y, 7, angle, true, false);
+          cell.initDisorder(w, h);
+          cells.push(cell);
+        }
+
+        for (let k = 0; k < PERSISTER_COUNT; k++) {
+          const angle = (k / PERSISTER_COUNT) * Math.PI * 2;
+          const dist = ductRadius * 0.85;
+          const x = cx + Math.cos(angle) * dist;
+          const y = cy + Math.sin(angle) * dist;
+
+          const cell = new CellAgent(EPITHELIAL_COUNT + STROMA_COUNT + k, x, y, 9, angle, false, true);
+          cell.initDisorder(w, h);
+          cells.push(cell);
+        }
+      }
+
+      function resizeAll() {
+        [canvasLeft, canvasRight].forEach(c => {
+          const rect = c.parentElement.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+          const w = rect.width > 50 ? rect.width : 580;
+          const h = rect.height > 50 ? rect.height : 380;
+
+          c.width = w * dpr;
+          c.height = h * dpr;
+
+          const ctx = c.getContext('2d');
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(dpr, dpr);
+        });
+
+        canvasLeft.logicalWidth = canvasLeft.width / (window.devicePixelRatio || 1);
+        canvasLeft.logicalHeight = canvasLeft.height / (window.devicePixelRatio || 1);
+        buildArchitecture();
+      }
+
+      function renderHealthy(timestamp) {
+        const w = canvasLeft.logicalWidth || 600;
+        const h = canvasLeft.logicalHeight || 380;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        ctxLeft.clearRect(0, 0, w, h);
+
+        ctxLeft.beginPath();
+        ctxLeft.arc(cx, cy, ductRadius * 1.18, 0, Math.PI * 2);
+        ctxLeft.strokeStyle = "rgba(52, 211, 153, 0.45)";
+        ctxLeft.lineWidth = 2.5;
+        ctxLeft.setLineDash([4, 4]);
+        ctxLeft.stroke();
+        ctxLeft.setLineDash([]);
+
+        const lumen = ctxLeft.createRadialGradient(cx, cy, 10, cx, cy, ductRadius * 0.7);
+        lumen.addColorStop(0, "rgba(6, 78, 59, 0.5)");
+        lumen.addColorStop(1, "rgba(2, 6, 23, 0.95)");
+        ctxLeft.fillStyle = lumen;
+        ctxLeft.beginPath();
+        ctxLeft.arc(cx, cy, ductRadius * 0.7, 0, Math.PI * 2);
+        ctxLeft.fill();
+
+        ctxLeft.strokeStyle = "rgba(110, 231, 183, 0.35)";
+        ctxLeft.lineWidth = 2;
+        ctxLeft.beginPath();
+        for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+          const next = (i + 1) % EPITHELIAL_COUNT;
+          ctxLeft.moveTo(cells[i].targetX, cells[i].targetY);
+          ctxLeft.lineTo(cells[next].targetX, cells[next].targetY);
+        }
+        ctxLeft.stroke();
+
+        const pulse = Math.sin(timestamp * 0.002) * 1.2;
+        for (let i = 0; i < cells.length; i++) {
+          const cell = cells[i];
+          if (cell.isPersister) continue;
+
+          if (cell.isStroma) {
+            ctxLeft.save();
+            ctxLeft.translate(cell.targetX, cell.targetY);
+            ctxLeft.rotate(cell.targetAngle + Math.PI / 2);
+            ctxLeft.fillStyle = "rgba(45, 212, 191, 0.45)";
+            ctxLeft.strokeStyle = "rgba(45, 212, 191, 0.85)";
+            ctxLeft.lineWidth = 1;
+            ctxLeft.beginPath();
+            ctxLeft.ellipse(0, 0, cell.radius * 1.6, cell.radius * 0.6, 0, 0, Math.PI * 2);
+            ctxLeft.fill();
+            ctxLeft.stroke();
+            ctxLeft.restore();
+          } else {
+            ctxLeft.save();
+            const grad = ctxLeft.createRadialGradient(cell.targetX, cell.targetY, 2, cell.targetX, cell.targetY, cell.radius + pulse);
+            grad.addColorStop(0, "rgba(16, 185, 129, 0.9)");
+            grad.addColorStop(0.7, "rgba(5, 150, 105, 0.65)");
+            grad.addColorStop(1, "rgba(4, 120, 87, 0.3)");
+
+            ctxLeft.fillStyle = grad;
+            ctxLeft.strokeStyle = "#a7f3d0";
+            ctxLeft.lineWidth = 1.2;
+            ctxLeft.beginPath();
+            ctxLeft.arc(cell.targetX, cell.targetY, cell.radius, 0, Math.PI * 2);
+            ctxLeft.fill();
+            ctxLeft.stroke();
+
+            ctxLeft.fillStyle = "#ecfdf5";
+            ctxLeft.shadowColor = "#34d399";
+            ctxLeft.shadowBlur = 4;
+            ctxLeft.beginPath();
+            ctxLeft.arc(cell.targetX, cell.targetY, cell.radius * 0.38, 0, Math.PI * 2);
+            ctxLeft.fill();
+            ctxLeft.restore();
+          }
+        }
+
+        ctxLeft.font = "11px ui-monospace, monospace";
+        ctxLeft.fillStyle = "rgba(110, 231, 183, 0.85)";
+        ctxLeft.textAlign = "center";
+        ctxLeft.fillText("PATENT DUCTAL LUMEN", cx, cy + 4);
+      }
+
+      function renderDynamic(factor, timestamp) {
+        const w = canvasLeft.logicalWidth || 600;
+        const h = canvasLeft.logicalHeight || 380;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        ctxRight.clearRect(0, 0, w, h);
+
+        const stromaIntact = actuators.stroma ? Math.max(0, 1 - factor * 1.5) : 1.0;
+        if (stromaIntact > 0.05) {
+          ctxRight.save();
+          ctxRight.lineWidth = 1.5;
+          ctxRight.strokeStyle = `rgba(236, 72, 153, ${stromaIntact * 0.55})`;
+          ctxRight.setLineDash([5, 5]);
+
+          for (let ring = 0; ring < 5; ring++) {
+            const rRadius = ductRadius * (1.15 + ring * 0.12);
+            ctxRight.beginPath();
+            for (let a = 0; a <= Math.PI * 2 + 0.1; a += 0.2) {
+              const jitter = Math.sin(a * 8 + timestamp * 0.002 + ring) * (8 * stromaIntact);
+              const rx = cx + Math.cos(a) * (rRadius + jitter);
+              const ry = cy + Math.sin(a) * (rRadius + jitter);
+              if (a === 0) ctxRight.moveTo(rx, ry);
+              else ctxRight.lineTo(rx, ry);
+            }
+            ctxRight.stroke();
+          }
+          ctxRight.setLineDash([]);
+          ctxRight.restore();
+
+          if (actuators.stroma && factor > 0.08 && factor < 0.8) {
+            ctxRight.save();
+            for (let np = 0; np < 8; np++) {
+              const npAngle = (np / 8) * Math.PI * 2 + timestamp * 0.002;
+              const npDist = ductRadius * 1.35;
+              const npx = cx + Math.cos(npAngle) * npDist;
+              const npy = cy + Math.sin(npAngle) * npDist;
+
+              ctxRight.fillStyle = "#14b8a6";
+              ctxRight.shadowColor = "#14b8a6";
+              ctxRight.shadowBlur = 8;
+              ctxRight.beginPath();
+              ctxRight.arc(npx, npy, 3, 0, Math.PI * 2);
+              ctxRight.fill();
+            }
+            ctxRight.restore();
+          }
+        }
+
+        if (actuators.bbb && factor > 0.15 && factor < 0.85) {
+          ctxRight.save();
+          ctxRight.strokeStyle = "rgba(99, 102, 241, 0.4)";
+          ctxRight.lineWidth = 3;
+          ctxRight.beginPath();
+          ctxRight.moveTo(40, 35);
+          ctxRight.lineTo(w - 40, 35);
+          ctxRight.stroke();
+
+          for (let p = 0; p < 5; p++) {
+            const px = 80 + p * ((w - 160) / 4);
+            const py = 35 + ((timestamp * 0.06 + p * 40) % 280);
+            ctxRight.fillStyle = "#818cf8";
+            ctxRight.shadowColor = "#818cf8";
+            ctxRight.shadowBlur = 6;
+            ctxRight.beginPath();
+            ctxRight.arc(px, py, 2.5, 0, Math.PI * 2);
+            ctxRight.fill();
+          }
+          ctxRight.restore();
+        }
+
+        if (actuators.opto && factor > 0.05 && factor < 0.98) {
+          ctxRight.save();
+          const waveAlpha = 0.10 + Math.sin(timestamp * 0.005) * 0.05;
+          const optoGrad = ctxRight.createLinearGradient(0, 0, w, h);
+          optoGrad.addColorStop(0, `rgba(6, 182, 212, ${waveAlpha * 0.7})`);
+          optoGrad.addColorStop(0.5, `rgba(59, 130, 246, ${waveAlpha * 1.1})`);
+          optoGrad.addColorStop(1, `rgba(139, 92, 246, ${waveAlpha * 0.5})`);
+          ctxRight.fillStyle = optoGrad;
+          ctxRight.fillRect(0, 0, w, h);
+          ctxRight.restore();
+        }
+
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].updateBrownian(factor, w, h);
+        }
+
+        if (actuators.eco && factor > 0.25 && factor < 0.8) {
+          ctxRight.save();
+          ctxRight.strokeStyle = "rgba(245, 158, 11, 0.25)";
+          ctxRight.lineWidth = 1;
+          ctxRight.setLineDash([2, 4]);
+          ctxRight.beginPath();
+          ctxRight.arc(cx, cy, ductRadius * 0.95, 0, Math.PI * 2);
+          ctxRight.stroke();
+          ctxRight.setLineDash([]);
+          ctxRight.restore();
+        }
+
+        if (factor > 0.15) {
+          ctxRight.beginPath();
+          ctxRight.arc(cx, cy, ductRadius * 1.18, 0, Math.PI * 2);
+          ctxRight.strokeStyle = `rgba(52, 211, 153, ${factor * 0.45})`;
+          ctxRight.lineWidth = 2.5;
+          ctxRight.setLineDash([4, 4]);
+          ctxRight.stroke();
+          ctxRight.setLineDash([]);
+
+          const lumen = ctxRight.createRadialGradient(cx, cy, 10, cx, cy, ductRadius * 0.7);
+          lumen.addColorStop(0, `rgba(6, 78, 59, ${factor * 0.5})`);
+          lumen.addColorStop(1, `rgba(2, 6, 23, ${0.95 * factor})`);
+          ctxRight.fillStyle = lumen;
+          ctxRight.beginPath();
+          ctxRight.arc(cx, cy, ductRadius * 0.7, 0, Math.PI * 2);
+          ctxRight.fill();
+        }
+
+        if (factor > 0.28) {
+          ctxRight.strokeStyle = `rgba(110, 231, 183, ${factor * 0.35})`;
+          ctxRight.lineWidth = 2;
+          ctxRight.beginPath();
+          for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+            const next = (i + 1) % EPITHELIAL_COUNT;
+            const c1 = cells[i].getInterpolated(factor);
+            const c2 = cells[next].getInterpolated(factor);
+            ctxRight.moveTo(c1.x, c1.y);
+            ctxRight.lineTo(c2.x, c2.y);
+          }
+          ctxRight.stroke();
+        }
+
+        for (let i = 0; i < cells.length; i++) {
+          const cell = cells[i];
+          const st = cell.getInterpolated(factor);
+
+          if (cell.isPersister) {
+            const persistAlpha = actuators.persist ? Math.max(0, 1 - factor * 1.8) : 1.0;
+            if (persistAlpha <= 0.02) continue;
+
+            ctxRight.save();
+            ctxRight.fillStyle = `rgba(249, 115, 22, ${0.8 * persistAlpha})`;
+            ctxRight.strokeStyle = `rgba(251, 146, 60, ${persistAlpha})`;
+            ctxRight.lineWidth = 2;
+            ctxRight.beginPath();
+            ctxRight.arc(st.x, st.y, cell.radius * (0.8 + Math.sin(timestamp * 0.005 + i) * 0.2), 0, Math.PI * 2);
+            ctxRight.fill();
+            ctxRight.stroke();
+
+            ctxRight.fillStyle = "#fff7ed";
+            ctxRight.shadowColor = "#f97316";
+            ctxRight.shadowBlur = 8;
+            ctxRight.beginPath();
+            ctxRight.arc(st.x, st.y, 3, 0, Math.PI * 2);
+            ctxRight.fill();
+            ctxRight.restore();
+            continue;
+          }
+
+          let r, g, b;
+          if (st.t < 0.4) {
+            const localT = st.t / 0.4;
+            r = Math.round(239 + (245 - 239) * localT);
+            g = Math.round(68 + (158 - 68) * localT);
+            b = Math.round(68 + (11 - 68) * localT);
+          } else if (st.t < 0.75) {
+            const localT = (st.t - 0.4) / 0.35;
+            r = Math.round(245 + (6 - 245) * localT);
+            g = Math.round(158 + (182 - 158) * localT);
+            b = Math.round(11 + (212 - 11) * localT);
+          } else {
+            const localT = (st.t - 0.75) / 0.25;
+            r = Math.round(6 + (16 - 6) * localT);
+            g = Math.round(182 + (185 - 182) * localT);
+            b = Math.round(212 + (129 - 212) * localT);
+          }
+
+          if (cell.isStroma) {
+            ctxRight.save();
+            ctxRight.translate(st.x, st.y);
+            const rot = cell.chaosAngle + (cell.targetAngle + Math.PI / 2 - cell.chaosAngle) * st.t;
+            ctxRight.rotate(rot);
+
+            ctxRight.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.35 + st.t * 0.15})`;
+            ctxRight.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.65 + st.t * 0.2})`;
+            ctxRight.lineWidth = 1;
+            ctxRight.beginPath();
+            ctxRight.ellipse(0, 0, st.r * 1.6, st.r * 0.6, 0, 0, Math.PI * 2);
+            ctxRight.fill();
+            ctxRight.stroke();
+            ctxRight.restore();
+          } else {
+            ctxRight.save();
+            const irregular = (1 - st.t) * 4;
+            const pulse = Math.sin(timestamp * 0.003 + cell.wobblePhase) * (1 - st.t) * 2;
+
+            const grad = ctxRight.createRadialGradient(st.x, st.y, 2, st.x, st.y, st.r + pulse);
+            grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.85)`);
+            grad.addColorStop(0.7, `rgba(${Math.max(0, r - 30)}, ${Math.max(0, g - 20)}, ${Math.max(0, b - 10)}, 0.6)`);
+            grad.addColorStop(1, `rgba(${Math.max(0, r - 50)}, ${Math.max(0, g - 40)}, ${Math.max(0, b - 20)}, 0.25)`);
+
+            ctxRight.fillStyle = grad;
+            ctxRight.strokeStyle = `rgba(${Math.min(255, r + 50)}, ${Math.min(255, g + 50)}, ${Math.min(255, b + 50)}, 0.7)`;
+            ctxRight.lineWidth = 1.2;
+
+            ctxRight.beginPath();
+            if (st.t < 0.82) {
+              const pts = 8;
+              for (let p = 0; p < pts; p++) {
+                const ang = (p / pts) * Math.PI * 2;
+                const offset = Math.sin(ang * 3 + cell.wobblePhase) * irregular;
+                const rad = st.r + pulse + offset;
+                const px = st.x + Math.cos(ang) * rad;
+                const py = st.y + Math.sin(ang) * rad;
+                if (p === 0) ctxRight.moveTo(px, py);
+                else ctxRight.lineTo(px, py);
+              }
+              ctxRight.closePath();
+            } else {
+              ctxRight.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+            }
+            ctxRight.fill();
+            ctxRight.stroke();
+
+            if (actuators.protac && factor > 0.12 && factor < 0.82 && i % 2 === 0) {
+              ctxRight.fillStyle = "#14b8a6";
+              ctxRight.shadowColor = "#14b8a6";
+              ctxRight.shadowBlur = 6;
+              const ubiAngle = timestamp * 0.003 + i;
+              const ux = st.x + Math.cos(ubiAngle) * (st.r * 0.6);
+              const uy = st.y + Math.sin(ubiAngle) * (st.r * 0.6);
+              ctxRight.beginPath();
+              ctxRight.arc(ux, uy, 2.2, 0, Math.PI * 2);
+              ctxRight.fill();
+            }
+
+            const nucRadius = st.r * (0.62 - st.t * 0.24);
+            const nucR = Math.round(254 + (236 - 254) * st.t);
+            const nucG = Math.round(202 + (253 - 202) * st.t);
+            const nucB = Math.round(202 + (245 - 202) * st.t);
+
+            ctxRight.fillStyle = `rgb(${nucR}, ${nucG}, ${nucB})`;
+            ctxRight.shadowColor = `rgb(${r}, ${g}, ${b})`;
+            ctxRight.shadowBlur = (1 - st.t) * 8 + 3;
+            ctxRight.beginPath();
+            ctxRight.arc(st.x, st.y, nucRadius, 0, Math.PI * 2);
+            ctxRight.fill();
+            ctxRight.restore();
+          }
+        }
+
+        if (factor > 0.82) {
+          ctxRight.save();
+          ctxRight.font = "11px ui-monospace, monospace";
+          ctxRight.fillStyle = `rgba(110, 231, 183, ${(factor - 0.82) * 5.5})`;
+          ctxRight.textAlign = "center";
+          ctxRight.fillText("LUMEN RECONSTITUTED (q = 1.00)", cx, cy + 4);
+          ctxRight.restore();
+        }
+      }
+
+      function updateSystem(val) {
+        const factor = val / 100;
+        const qStr = factor.toFixed(2);
+
+        headerQ.innerText = `q = ${qStr}`;
+        metricQ.innerText = qStr;
+
+        const entropyVal = (4.15 * (1 - factor) + 0.12 * factor).toFixed(2);
+        metricEntropy.innerText = `${entropyVal} bits`;
+
+        const stromaVal = actuators.stroma ? Math.min(100, Math.round(14 + factor * 86)) : 14;
+        metricStroma.innerText = `${stromaVal}%`;
+        headerStroma.innerText = `${stromaVal}%`;
+
+        const persistVal = actuators.persist ? Math.min(100, Math.round(factor * 100)) : 0;
+        metricPersist.innerText = `${persistVal}%`;
+        const activePersisters = Math.max(0, Math.round(42 * (1 - (persistVal / 100))));
+        headerPersist.innerText = activePersisters > 0 ? `Active (${activePersisters})` : 'Eradicated';
+        headerPersist.style.color = activePersisters > 0 ? 'var(--orange-persister)' : 'var(--emerald-crispr)';
+
+        const protacVal = actuators.protac ? Math.min(100, Math.round(factor * 100)) : 0;
+        metricProtac.innerText = `${protacVal}%`;
+
+        if (factor < 0.3) {
+          metricEco.innerText = "Escape Risk (High)";
+          metricEco.style.color = "var(--red-cancer)";
+        } else if (factor < 0.75) {
+          metricEco.innerText = "Trapped (Stable)";
+          metricEco.style.color = "var(--gold-phys)";
+        } else {
+          metricEco.innerText = "Ground Attractor";
+          metricEco.style.color = "var(--emerald-crispr)";
+        }
+
+        let phase = PHASES[0];
+        for (let i = 0; i < PHASES.length; i++) {
+          if (val >= PHASES[i].min) phase = PHASES[i];
+        }
+
+        phaseDisplay.innerText = phase.title;
+        phaseDisplay.style.color = phase.color;
+
+        narrativeHead.innerText = phase.head;
+        narrativeHead.style.color = phase.color;
+        narrativeDetail.innerText = phase.desc;
+        narrativeCard.style.borderColor = phase.color + "55";
+
+        rightHeadText.innerText = phase.rightTitle;
+        rightHeadText.style.color = phase.color;
+        rightSubText.innerText = phase.rightSub;
+
+        rightBadgeText.innerText = phase.tag;
+        rightBadgeText.style.color = phase.color;
+        rightBadgeText.style.borderColor = phase.color + "55";
+        rightBadgeText.style.background = phase.color + "18";
+
+        paneRightCard.style.borderColor = phase.color + "55";
+        rightFloatLegend.innerText = phase.legend;
+        rightFloatLegend.style.color = phase.color;
+
+        metricQ.style.color = phase.color;
+        metricEntropy.style.color = phase.color;
+      }
+
+      function stopSimulation() {
+        isSimulating = false;
+        runLabel.innerText = "Simulate Multi-Vector Restoration";
+        runIcon.innerText = "▶";
+        runBtn.style.background = "#4f46e5";
+      }
+
+      runBtn.addEventListener('click', () => {
+        isSimulating = !isSimulating;
+        if (isSimulating) {
+          runLabel.innerText = "Pause Simulation";
+          runIcon.innerText = "⏸";
+          runBtn.style.background = "#f59e0b";
+          if (parseFloat(slider.value) >= 100) {
+            slider.value = 0;
+            updateSystem(0);
+          }
+        } else {
+          stopSimulation();
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        stopSimulation();
+        slider.value = 0;
+        updateSystem(0);
+        buildArchitecture();
+      });
+
+      slider.addEventListener('input', (e) => {
+        if (isSimulating) stopSimulation();
+        updateSystem(parseFloat(e.target.value));
+      });
+
+      let lastTime = 0;
+      function renderLoop(time) {
+        if (!lastTime) lastTime = time;
+        const dt = time - lastTime;
+        lastTime = time;
+
+        if (isSimulating) {
+          let speedFactor = 0.02;
+          Object.values(actuators).forEach(act => {
+            if (act) speedFactor += 0.005;
+          });
+
+          let nextVal = parseFloat(slider.value) + speedFactor * (dt / 16);
+          if (nextVal >= 100) {
+            nextVal = 100;
+            slider.value = 100;
+            updateSystem(100);
+            stopSimulation();
+          } else {
+            slider.value = nextVal;
+            updateSystem(nextVal);
+          }
+        }
+
+        const factor = parseFloat(slider.value) / 100;
+        renderHealthy(time);
+        renderDynamic(factor, time);
+
+        animFrameId = requestAnimationFrame(renderLoop);
+      }
+
+      function startAll() {
+        resizeAll();
+        updateSystem(0);
+        if (!animFrameId) {
+          animFrameId = requestAnimationFrame(renderLoop);
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', startAll);
+      window.addEventListener('load', startAll);
+      window.addEventListener('resize', resizeAll);
+
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(startAll, 10);
+      }
+    })();
+  </script>
+</body>
+</html>
