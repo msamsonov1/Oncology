@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complex Systems Oncology & Optogenetic Restoration</title>
+  <style>
+    /* Zero-dependency, offline-ready styling */
+    :root {
+      --bg-dark: #030712;
+      --card-bg: #0f172a;
+      --card-border: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      padding-bottom: 24px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      width: 100%;
+    }
+
+    /* Header */
+    header {
+      background-color: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .header-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-icon {
+      background: linear-gradient(135deg, #f59e0b, #6366f1);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    }
+
+    .title-group h1 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .title-group p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .metric-pill {
+      background: #020617;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulsing-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-cyan);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 18px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Laureate Banner */
+    .nobel-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .nobel-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .nobel-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      padding: 14px 16px;
+      border-radius: 12px;
+    }
+
+    .nobel-box-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nobel-box p {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* Interactive Controls */
+    .controls-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stage-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--accent-red);
+      transition: color 0.3s;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+    }
+    .btn-primary:hover { background: #4338ca; }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+    }
+    .btn-secondary:hover { background: #334155; }
+
+    .btn-opto {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+    .btn-opto.active {
+      background: var(--accent-cyan);
+      color: #041018;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+    }
+
+    /* Slider track */
+    .slider-container {
+      margin: 16px 0;
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(to right, #ef4444, #f59e0b 50%, #10b981);
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+      cursor: pointer;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #3b82f6;
+      cursor: grab;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+      transition: transform 0.1s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Description Box */
+    .explanation-panel {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .panel-subheading {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-red);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .panel-description {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Viewports Layout */
+    .viewports-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    @media (min-width: 900px) {
+      .viewports-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .viewport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .viewport-card.healthy {
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .viewport-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .vp-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vp-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .vp-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .vp-tag {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    /* Fixed Aspect Ratio Canvas Container */
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      margin-top: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    .canvas-overlay-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: #cbd5e1;
+      pointer-events: none;
+    }
+
+    .canvas-overlay-right {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--accent-amber);
+      pointer-events: none;
+    }
+
+    /* Metrics Grid */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #1e293b;
+      padding-bottom: 4px;
+    }
+
+    .metric-value {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: 600;
+    }
+
+    /* Explanatory Technical Section */
+    .scientific-footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    @media (min-width: 768px) {
+      .scientific-footer-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .sci-card {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .sci-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      margin-bottom: 6px;
+    }
+
+    .sci-card p {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-content">
+      <div class="brand-group">
+        <div class="badge-icon">2021 &bull; 2026</div>
+        <div class="title-group">
+          <h1>Complex Systems Oncology & Optogenetic Restoration</h1>
+          <p>Spin Glass Energy Topography (Parisi) + Light-Gated Actuators (Deisseroth, Hegemann, Nagel)</p>
+        </div>
+      </div>
+      <div class="metric-pill">
+        <div class="pulsing-dot"></div>
+        Order Parameter: <strong id="headerOrderMetric" style="color: #fff;">q = 0.00</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h2 style="font-size: 16px; font-weight: 800; color: #fbbf24;">
+          Integrated Dual Nobel Prize Scientific Paradigm
+        </h2>
+        <span style="font-size: 11px; font-family: ui-monospace, monospace; background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3);">
+          Physics of Disordered Systems &bull; Optogenetic Precision Actuation
+        </span>
+      </div>
+
+      <div class="nobel-grid">
+        <div class="nobel-box">
+          <div class="nobel-box-title" style="color: #fbbf24;">
+            <span>⚛</span> 2021 Nobel Prize in Physics: Giorgio Parisi
+          </div>
+          <p>
+            <strong>The Theoretical Blueprint:</strong> Parisi solved the replica symmetry breaking problem in spin glasses, proving that complex, disordered, frustrated systems possess hidden valleys of equilibrium. Translating this to oncology: chemoresistant Stage IV cancer is not an uncrackable black box, but a frustrated cellular network trapped in an aberrant high-entropy energy well.
+          </p>
+        </div>
+
+        <div class="nobel-box">
+          <div class="nobel-box-title" style="color: #38bdf8;">
+            <span>💡</span> 2026 Nobel Prize in Medicine: Deisseroth, Hegemann, Nagel
+          </div>
+          <p>
+            <strong>The Precision Actuator (Optogenetics):</strong> Pioneered light-gated ion channels (Channelrhodopsin/Halorhodopsin), allowing researchers to safely control molecular pathways inside living tissue without collateral chemical poisoning. In cancer, targeted light pulses provide the non-toxic physical switch to force malignant cells out of the frustrated state and trigger polarized self-assembly.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="controls-header">
+        <div>
+          <span style="font-size: 11px; text-transform: uppercase; font-family: ui-monospace, monospace; color: var(--text-muted); letter-spacing: 0.5px;">
+            Therapeutic State Transition Controller
+          </span>
+          <div id="stageTitle" class="stage-title">
+            Phase 0: Chaotic Disordered State (Stage IV Metastatic Soup)
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button id="optoToggleBtn" class="btn-opto active">
+            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+            <span id="optoBtnText">Optogenetic Pulse: ON (470nm)</span>
+          </button>
+          <button id="playBtn" class="btn-primary">
+            <span id="playIcon">▶</span>
+            <span id="playText">Simulate Restoration</span>
+          </button>
+          <button id="resetBtn" class="btn-secondary">
+            Reset to Soup
+          </button>
+        </div>
+      </div>
+
+      <div class="slider-container">
+        <div class="slider-labels">
+          <span style="color: var(--accent-red);">● High Entropy Disordered Soup (0%)</span>
+          <span style="color: var(--accent-amber);">Optogenetic Basin Shift (50%)</span>
+          <span style="color: var(--accent-green);">Reordered Cohesive Duct (100%) ●</span>
+        </div>
+        <input type="range" id="entropySlider" min="0" max="100" value="0" step="0.2">
+      </div>
+
+      <div id="explanationPanel" class="explanation-panel">
+        <div id="panelSubheading" class="panel-subheading">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:currentColor;"></span>
+          Disordered Malignant Architecture (High Shannon Entropy)
+        </div>
+        <p id="panelDescription" class="panel-description">
+          In this initial state, the tissue has lost spatial polarity, basement membrane containment, and cell-cell junctions. Like a spin glass trapped in a frustrated disordered energy landscape, broken regulatory networks allow continuous invasion, drug-efflux pumps, and uncontrolled proliferation into distant organs.
+        </p>
+      </div>
+    </section>
+
+    <div class="viewports-grid">
+
+      <!-- Left Viewport: Healthy Ground State -->
+      <div class="viewport-card healthy">
+        <div class="viewport-header">
+          <div class="vp-title-group">
+            <div class="vp-status-dot" style="background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green);"></div>
+            <div>
+              <div class="vp-title" style="color: #6ee7b7;">Left: Healthy Ground State</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Cohesive, Polarized Ductal Epithelium</div>
+            </div>
+          </div>
+          <div class="vp-tag" style="color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1);">
+            ΔS = Minimal Entropy
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <!-- Explicit width and height attributes ensure immediate rendering buffer on local file execution -->
+          <canvas id="healthyCanvas" width="600" height="380"></canvas>
+          <div class="canvas-overlay-badge">
+            Target Ground State &bull; Intact Hollow Lumen
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-item">
+            <span>Cell Polarity Index:</span>
+            <span class="metric-value" style="color: var(--accent-green);">0.98</span>
+          </div>
+          <div class="metric-item">
+            <span>E-Cadherin Adhesion:</span>
+            <span class="metric-value" style="color: var(--accent-green);">100%</span>
+          </div>
+          <div class="metric-item">
+            <span>Parisi Order Parameter (q):</span>
+            <span class="metric-value" style="color: var(--accent-green);">1.00</span>
+          </div>
+          <div class="metric-item">
+            <span>Apoptosis Sensing (TP53):</span>
+            <span class="metric-value" style="color: var(--accent-green);">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Viewport: Disordered Cancer Soup transitioning to Restored State -->
+      <div id="rightCard" class="viewport-card" style="border-color: rgba(239, 68, 68, 0.4);">
+        <div class="viewport-header">
+          <div class="vp-title-group">
+            <div id="rightStatusDot" class="vp-status-dot" style="background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red);"></div>
+            <div>
+              <div id="rightTitleText" class="vp-title" style="color: #fca5a5;">Right: Disordered Cancer Soup</div>
+              <div id="rightSubtitleText" style="font-size: 11px; color: var(--text-muted);">Chemoresistant Frustrated Network</div>
+            </div>
+          </div>
+          <div id="rightEntropyTag" class="vp-tag" style="color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1);">
+            Entropy S = Max
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <!-- Explicit width and height attributes ensure immediate rendering buffer on local file execution -->
+          <canvas id="disorderCanvas" width="600" height="380"></canvas>
+          <div id="rightOverlayBadge" class="canvas-overlay-right">
+            Drag slider to initiate reordering
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-item">
+            <span>Dynamic Alignment (q):</span>
+            <span id="metricQ" class="metric-value" style="color: var(--accent-red);">0.00</span>
+          </div>
+          <div class="metric-item">
+            <span>E-Cadherin Expression:</span>
+            <span id="metricAdhesion" class="metric-value" style="color: var(--accent-red);">8%</span>
+          </div>
+          <div class="metric-item">
+            <span>Frustrated Interactions:</span>
+            <span id="metricFrustration" class="metric-value" style="color: var(--accent-red);">100%</span>
+          </div>
+          <div class="metric-item">
+            <span>Cellular Morphology:</span>
+            <span id="metricMorph" class="metric-value" style="color: var(--accent-red);">Pleomorphic</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="scientific-footer-grid">
+      <div class="sci-card">
+        <div class="sci-card-title" style="color: #fbbf24;">1. Statistical Physics</div>
+        <p>
+          Parisi demonstrated that disordered materials (spin glasses) contain predictable equilibrium basins. Cancer's drug resistance is modeled as a localized energetic trap in cellular gene expression space.
+        </p>
+      </div>
+
+      <div class="sci-card">
+        <div class="sci-card-title" style="color: #38bdf8;">2. Light-Gated Actuators</div>
+        <p>
+          Optogenetics (Deisseroth, Hegemann, Nagel) uses 470nm light to open ion channels with microsecond precision, altering cellular bio-electric polarity without touching surrounding healthy cells.
+        </p>
+      </div>
+
+      <div class="sci-card">
+        <div class="sci-card-title" style="color: #a78bfa;">3. Reordering The Soup</div>
+        <p>
+          Instead of introducing systemic chemical toxins that select for resistant mutants, optical stimulation drives anomalous cells back across the saddle point into normal tissue geometry.
+        </p>
+      </div>
+
+      <div class="sci-card">
+        <div class="sci-card-title" style="color: #34d399;">4. Cohesive Homeostasis</div>
+        <p>
+          When the order parameter reaches q ≈ 1.0, the cells reconstitute tight apical-basal polarity, re-express E-cadherin, reopen the clear duct lumen, and restore organ-level structure.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* Pure native JavaScript, no external dependencies, executes properly under file:// protocol */
+    (function() {
+      // Configuration constants
+      const EPITHELIAL_COUNT = 38;
+      const STROMA_COUNT = 24;
+
+      // Stage states synchronized with slider (0% to 100%)
+      const STAGES = [
+        {
+          min: 0,
+          title: "Phase 0: Chaotic Disordered State (Stage IV Metastatic Soup)",
+          subheading: "Disordered Malignant Architecture (High Shannon Entropy)",
+          desc: "In this initial state, the tissue has lost spatial polarity, basement membrane containment, and cell-cell junctions. Like a spin glass trapped in a frustrated disordered energy landscape, broken regulatory networks allow continuous invasion, drug-efflux pumps, and uncontrolled proliferation into distant organs.",
+          color: "#ef4444",
+          tag: "Entropy S = Max",
+          rightTitle: "Right: Disordered Cancer Soup",
+          rightSub: "Chemoresistant Frustrated Network",
+          morph: "Pleomorphic / Aneuploid",
+          overlayText: "Drag slider to initiate reordering"
+        },
+        {
+          min: 25,
+          title: "Phase 1: Optogenetic Photo-Activation (2026 Medicine Mechanism)",
+          subheading: "470nm Light-Gated Channel Activation (Deisseroth/Hegemann/Nagel)",
+          desc: "Targeted blue-spectrum photonic pulses activate light-gated ion channels (Channelrhodopsin) on malignant membranes. Bio-electric hyperpolarization halts random motility and destabilizes the tumor's multi-drug resistance pumps without damaging neighboring healthy circuitry.",
+          color: "#06b6d4",
+          tag: "Opto-Pulse Active",
+          rightTitle: "Right: Light-Gated Photo-Actuation",
+          rightSub: "470nm Optical Switch Engaged",
+          morph: "Depolarized / Arrested",
+          overlayText: "Photonic channels guiding cells"
+        },
+        {
+          min: 60,
+          title: "Phase 2: Spin Glass Energy Relocalization (Attractor Basin Shift)",
+          subheading: "Parisi Order Parameter (q) Relaxing Toward Symmetrical Basin",
+          desc: "Statistical physics models the relaxation of frustrated bonds. Cells trigger selective opto-caspase apoptosis in unviable mutants, while salvageable cells begin re-synthesizing E-cadherin adhesion proteins and moving toward polarized collective geometry.",
+          color: "#f59e0b",
+          tag: "Entropy S = Dropping",
+          rightTitle: "Right: Mesenchymal Reversion",
+          rightSub: "Epithelial Assembly Underway",
+          morph: "Intermediate Polarized",
+          overlayText: "Attractor basin collapsing into order"
+        },
+        {
+          min: 88,
+          title: "Phase 3: Cohesive Ground State Reconstitution (Healthy Ductal Geometry)",
+          subheading: "Order Parameter Stabilized (q ≈ 1.0) — Ground State Achieved",
+          desc: "The cellular collective has fully reconstituted the identical, polarized spatial configuration seen in the healthy left pane. Basement membrane boundaries have re-sealed, contact inhibition is completely active, and the biological code operates in harmonious homeostasis.",
+          color: "#10b981",
+          tag: "Entropy S = Minimal",
+          rightTitle: "Right: Restored Healthy Ground State",
+          rightSub: "Identical Ductal Architecture Rebuilt",
+          morph: "Normal Polar Epithelial",
+          overlayText: "Restoration Complete (q = 1.00)"
+        }
+      ];
+
+      // DOM Elements
+      const healthyCanvas = document.getElementById('healthyCanvas');
+      const disorderCanvas = document.getElementById('disorderCanvas');
+      const healthyCtx = healthyCanvas.getContext('2d');
+      const disorderCtx = disorderCanvas.getContext('2d');
+
+      const slider = document.getElementById('entropySlider');
+      const headerOrderMetric = document.getElementById('headerOrderMetric');
+      const stageTitle = document.getElementById('stageTitle');
+      const panelSubheading = document.getElementById('panelSubheading');
+      const panelDescription = document.getElementById('panelDescription');
+      const explanationPanel = document.getElementById('explanationPanel');
+
+      const rightCard = document.getElementById('rightCard');
+      const rightStatusDot = document.getElementById('rightStatusDot');
+      const rightTitleText = document.getElementById('rightTitleText');
+      const rightSubtitleText = document.getElementById('rightSubtitleText');
+      const rightEntropyTag = document.getElementById('rightEntropyTag');
+      const rightOverlayBadge = document.getElementById('rightOverlayBadge');
+
+      const metricQ = document.getElementById('metricQ');
+      const metricAdhesion = document.getElementById('metricAdhesion');
+      const metricFrustration = document.getElementById('metricFrustration');
+      const metricMorph = document.getElementById('metricMorph');
+
+      const playBtn = document.getElementById('playBtn');
+      const playIcon = document.getElementById('playIcon');
+      const playText = document.getElementById('playText');
+      const resetBtn = document.getElementById('resetBtn');
+      const optoToggleBtn = document.getElementById('optoToggleBtn');
+      const optoBtnText = document.getElementById('optoBtnText');
+
+      // Simulation State
+      let isPlaying = false;
+      let optoEnabled = true;
+      let currentProgress = 0; // 0 to 100
+      let animationFrameId = null;
+
+      // Cell Class Modeling Dual Physics States
+      class Cell {
+        constructor(id, targetX, targetY, radius, angle, isStroma = false) {
+          this.id = id;
+          this.targetX = targetX;
+          this.targetY = targetY;
+          this.radius = radius;
+          this.targetAngle = angle;
+          this.isStroma = isStroma;
+
+          // Chaotic coordinates
+          this.chaosX = 0;
+          this.chaosY = 0;
+          this.chaosRadius = radius * (0.8 + Math.random() * 0.8);
+          this.chaosAngle = Math.random() * Math.PI * 2;
+          this.wobblePhase = Math.random() * Math.PI * 2;
+          this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+        }
+
+        initChaos(width, height) {
+          if (this.isStroma) {
+            this.chaosX = Math.random() * width;
+            this.chaosY = Math.random() * height;
+          } else {
+            // Cancer cells cluster irregularly with outliers escaping outwards
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 30 + Math.random() * (Math.min(width, height) * 0.42);
+            this.chaosX = (width / 2) + Math.cos(angle) * dist;
+            this.chaosY = (height / 2) + Math.sin(angle) * dist;
+          }
+        }
+
+        // Brownian motion when high disorder
+        updateBrownian(factor, width, height) {
+          if (factor < 0.95) {
+            const jitter = (1 - factor) * 1.5;
+            this.chaosX += (Math.random() - 0.5) * jitter;
+            this.chaosY += (Math.random() - 0.5) * jitter;
+
+            // Boundaries
+            const pad = 20;
+            if (this.chaosX < pad) this.chaosX = pad;
+            if (this.chaosX > width - pad) this.chaosX = width - pad;
+            if (this.chaosY < pad) this.chaosY = pad;
+            if (this.chaosY > height - pad) this.chaosY = height - pad;
+          }
+        }
+
+        // Interpolated position using cubic easing
+        getState(factor) {
+          const t = factor < 0.5 ? 4 * factor * factor * factor : 1 - Math.pow(-2 * factor + 2, 3) / 2;
+          const x = this.chaosX + (this.targetX - this.chaosX) * t;
+          const y = this.chaosY + (this.targetY - this.chaosY) * t;
+          const r = this.chaosRadius + (this.radius - this.chaosRadius) * t;
+          return { x, y, r, t };
+        }
+      }
+
+      let cells = [];
+
+      // Initialize geometry
+      function initGeometry() {
+        const w = healthyCanvas.width;
+        const h = healthyCanvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        cells = [];
+
+        // 1. Epithelial Ring
+        for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+          const angle = (i / EPITHELIAL_COUNT) * Math.PI * 2;
+          // Staggered double-layer for realistic epithelial histology
+          const layerOffset = (i % 2 === 0) ? 0 : -8;
+          const dist = ductRadius + layerOffset;
+          const x = cx + Math.cos(angle) * dist;
+          const y = cy + Math.sin(angle) * dist;
+          const cellRadius = (ductRadius * 2 * Math.PI / EPITHELIAL_COUNT) * 0.92;
+
+          const cell = new Cell(i, x, y, cellRadius, angle, false);
+          cell.initChaos(w, h);
+          cells.push(cell);
+        }
+
+        // 2. Organized Basement Stroma
+        for (let j = 0; j < STROMA_COUNT; j++) {
+          const angle = (j / STROMA_COUNT) * Math.PI * 2;
+          const dist = ductRadius * 1.38 + Math.sin(angle * 5) * 8;
+          const x = cx + Math.cos(angle) * dist;
+          const y = cy + Math.sin(angle) * dist;
+
+          const cell = new Cell(EPITHELIAL_COUNT + j, x, y, 7, angle, true);
+          cell.initChaos(w, h);
+          cells.push(cell);
+        }
+      }
+
+      // Responsive Canvas Setup
+      function setupCanvasResolution() {
+        [healthyCanvas, disorderCanvas].forEach(cnv => {
+          const rect = cnv.parentElement.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+          const width = rect.width > 50 ? rect.width : 560;
+          const height = rect.height > 50 ? rect.height : 380;
+
+          cnv.width = width * dpr;
+          cnv.height = height * dpr;
+
+          const ctx = cnv.getContext('2d');
+          ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset scale
+          ctx.scale(dpr, dpr);
+        });
+
+        // Regenerate geometry using logical coordinate space
+        healthyCanvas.logicalWidth = healthyCanvas.width / (window.devicePixelRatio || 1);
+        healthyCanvas.logicalHeight = healthyCanvas.height / (window.devicePixelRatio || 1);
+        initGeometry();
+      }
+
+      // RENDER LEFT: Healthy Ground State
+      function drawHealthy(timestamp) {
+        const w = healthyCanvas.logicalWidth || 600;
+        const h = healthyCanvas.logicalHeight || 380;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        healthyCtx.clearRect(0, 0, w, h);
+
+        // Basement Membrane Matrix
+        healthyCtx.beginPath();
+        healthyCtx.arc(cx, cy, ductRadius * 1.18, 0, Math.PI * 2);
+        healthyCtx.strokeStyle = "rgba(52, 211, 153, 0.4)";
+        healthyCtx.lineWidth = 2.5;
+        healthyCtx.setLineDash([4, 4]);
+        healthyCtx.stroke();
+        healthyCtx.setLineDash([]);
+
+        // Hollow Central Lumen
+        const lumenGrad = healthyCtx.createRadialGradient(cx, cy, 10, cx, cy, ductRadius * 0.7);
+        lumenGrad.addColorStop(0, "rgba(6, 78, 59, 0.45)");
+        lumenGrad.addColorStop(1, "rgba(2, 6, 23, 0.95)");
+        healthyCtx.fillStyle = lumenGrad;
+        healthyCtx.beginPath();
+        healthyCtx.arc(cx, cy, ductRadius * 0.7, 0, Math.PI * 2);
+        healthyCtx.fill();
+
+        // Connected Tight Junction Ring
+        healthyCtx.strokeStyle = "rgba(110, 231, 183, 0.3)";
+        healthyCtx.lineWidth = 2;
+        healthyCtx.beginPath();
+        for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+          const next = (i + 1) % EPITHELIAL_COUNT;
+          healthyCtx.moveTo(cells[i].targetX, cells[i].targetY);
+          healthyCtx.lineTo(cells[next].targetX, cells[next].targetY);
+        }
+        healthyCtx.stroke();
+
+        // Render Healthy Cells
+        const pulse = Math.sin(timestamp * 0.002) * 1.2;
+        for (let i = 0; i < cells.length; i++) {
+          const cell = cells[i];
+
+          if (cell.isStroma) {
+            // Elongated support fibroblasts
+            healthyCtx.save();
+            healthyCtx.translate(cell.targetX, cell.targetY);
+            healthyCtx.rotate(cell.targetAngle + Math.PI / 2);
+            healthyCtx.fillStyle = "rgba(45, 212, 191, 0.45)";
+            healthyCtx.strokeStyle = "rgba(45, 212, 191, 0.8)";
+            healthyCtx.lineWidth = 1;
+            healthyCtx.beginPath();
+            healthyCtx.ellipse(0, 0, cell.radius * 1.6, cell.radius * 0.6, 0, 0, Math.PI * 2);
+            healthyCtx.fill();
+            healthyCtx.stroke();
+            healthyCtx.restore();
+          } else {
+            // Symmetrical, polarized epithelial cells
+            healthyCtx.save();
+            const grad = healthyCtx.createRadialGradient(cell.targetX, cell.targetY, 2, cell.targetX, cell.targetY, cell.radius + pulse);
+            grad.addColorStop(0, "rgba(16, 185, 129, 0.9)");
+            grad.addColorStop(0.7, "rgba(5, 150, 105, 0.65)");
+            grad.addColorStop(1, "rgba(4, 120, 87, 0.3)");
+
+            healthyCtx.fillStyle = grad;
+            healthyCtx.strokeStyle = "#a7f3d0";
+            healthyCtx.lineWidth = 1.2;
+            healthyCtx.beginPath();
+            healthyCtx.arc(cell.targetX, cell.targetY, cell.radius, 0, Math.PI * 2);
+            healthyCtx.fill();
+            healthyCtx.stroke();
+
+            // Intact round nucleus
+            healthyCtx.fillStyle = "#ecfdf5";
+            healthyCtx.shadowColor = "#34d199";
+            healthyCtx.shadowBlur = 4;
+            healthyCtx.beginPath();
+            healthyCtx.arc(cell.targetX, cell.targetY, cell.radius * 0.38, 0, Math.PI * 2);
+            healthyCtx.fill();
+            healthyCtx.restore();
+          }
+        }
+
+        // Center label
+        healthyCtx.font = "11px ui-monospace, SFMono-Regular, monospace";
+        healthyCtx.fillStyle = "rgba(110, 231, 183, 0.75)";
+        healthyCtx.textAlign = "center";
+        healthyCtx.fillText("CLEAR DUCT LUMEN", cx, cy + 4);
+      }
+
+      // RENDER RIGHT: Dynamic Transition (Soup -> Restored)
+      function drawDisorder(factor, timestamp) {
+        const w = healthyCanvas.logicalWidth || 600;
+        const h = healthyCanvas.logicalHeight || 380;
+        const cx = w / 2;
+        const cy = h / 2;
+        const ductRadius = Math.min(w, h) * 0.30;
+
+        disorderCtx.clearRect(0, 0, w, h);
+
+        // Optogenetic 470nm Photonic Wave pulses
+        if (optoEnabled && factor > 0.04 && factor < 0.98) {
+          disorderCtx.save();
+          const waveAlpha = 0.12 + Math.sin(timestamp * 0.006) * 0.08;
+          const optoGrad = disorderCtx.createLinearGradient(0, 0, w, h);
+          optoGrad.addColorStop(0, `rgba(6, 182, 212, ${waveAlpha * 0.6})`);
+          optoGrad.addColorStop(0.5, `rgba(59, 130, 246, ${waveAlpha * 1.2})`);
+          optoGrad.addColorStop(1, `rgba(139, 92, 246, ${waveAlpha * 0.5})`);
+          disorderCtx.fillStyle = optoGrad;
+          disorderCtx.fillRect(0, 0, w, h);
+
+          // Radial laser scanlines
+          disorderCtx.strokeStyle = "rgba(34, 211, 238, 0.28)";
+          disorderCtx.lineWidth = 1;
+          disorderCtx.setLineDash([6, 10]);
+          for (let ray = 0; ray < 6; ray++) {
+            const rayAngle = (ray / 6) * Math.PI * 2 + (timestamp * 0.0008);
+            disorderCtx.beginPath();
+            disorderCtx.moveTo(cx, cy);
+            disorderCtx.lineTo(cx + Math.cos(rayAngle) * w, cy + Math.sin(rayAngle) * h);
+            disorderCtx.stroke();
+          }
+          disorderCtx.setLineDash([]);
+          disorderCtx.restore();
+        }
+
+        // Update thermal / brownian flutter
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].updateBrownian(factor, w, h);
+        }
+
+        // Emerging basement membrane & lumen
+        if (factor > 0.1) {
+          disorderCtx.beginPath();
+          disorderCtx.arc(cx, cy, ductRadius * 1.18, 0, Math.PI * 2);
+          disorderCtx.strokeStyle = `rgba(52, 211, 153, ${factor * 0.4})`;
+          disorderCtx.lineWidth = 2.5;
+          disorderCtx.setLineDash([4, 4]);
+          disorderCtx.stroke();
+          disorderCtx.setLineDash([]);
+
+          // Lumen fading in
+          const lumenGrad = disorderCtx.createRadialGradient(cx, cy, 10, cx, cy, ductRadius * 0.7);
+          lumenGrad.addColorStop(0, `rgba(6, 78, 59, ${factor * 0.45})`);
+          lumenGrad.addColorStop(1, `rgba(2, 6, 23, ${0.95 * factor})`);
+          disorderCtx.fillStyle = lumenGrad;
+          disorderCtx.beginPath();
+          disorderCtx.arc(cx, cy, ductRadius * 0.7, 0, Math.PI * 2);
+          disorderCtx.fill();
+        }
+
+        // Chaotic frustrated connections (Cancer)
+        if (factor < 0.65) {
+          disorderCtx.strokeStyle = `rgba(239, 68, 68, ${(1 - factor) * 0.25})`;
+          disorderCtx.lineWidth = 1;
+          disorderCtx.beginPath();
+          for (let i = 0; i < cells.length; i += 2) {
+            const c1 = cells[i].getState(factor);
+            const c2 = cells[(i + 7) % cells.length].getState(factor);
+            disorderCtx.moveTo(c1.x, c1.y);
+            disorderCtx.lineTo(c2.x, c2.y);
+          }
+          disorderCtx.stroke();
+        }
+
+        // Reconstituting tight junctions (Ordered)
+        if (factor > 0.25) {
+          disorderCtx.strokeStyle = `rgba(110, 231, 183, ${factor * 0.35})`;
+          disorderCtx.lineWidth = 2;
+          disorderCtx.beginPath();
+          for (let i = 0; i < EPITHELIAL_COUNT; i++) {
+            const next = (i + 1) % EPITHELIAL_COUNT;
+            const c1 = cells[i].getState(factor);
+            const c2 = cells[next].getState(factor);
+            disorderCtx.moveTo(c1.x, c1.y);
+            disorderCtx.lineTo(c2.x, c2.y);
+          }
+          disorderCtx.stroke();
+        }
+
+        // Draw Cells with color transition (Red -> Amber -> Green)
+        for (let i = 0; i < cells.length; i++) {
+          const cell = cells[i];
+          const st = cell.getState(factor);
+
+          // Color interpolation
+          const r = Math.round(239 + (16 - 239) * st.t);
+          const g = Math.round(68 + (185 - 68) * st.t);
+          const b = Math.round(68 + (129 - 68) * st.t);
+
+          if (cell.isStroma) {
+            disorderCtx.save();
+            disorderCtx.translate(st.x, st.y);
+            const rot = cell.chaosAngle + (cell.targetAngle + Math.PI / 2 - cell.chaosAngle) * st.t;
+            disorderCtx.rotate(rot);
+
+            disorderCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.3 + st.t * 0.15})`;
+            disorderCtx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.6 + st.t * 0.2})`;
+            disorderCtx.lineWidth = 1;
+            disorderCtx.beginPath();
+            disorderCtx.ellipse(0, 0, st.r * 1.6, st.r * 0.6, 0, 0, Math.PI * 2);
+            disorderCtx.fill();
+            disorderCtx.stroke();
+            disorderCtx.restore();
+          } else {
+            disorderCtx.save();
+            const irregular = (1 - st.t) * 4;
+            const pulse = Math.sin(timestamp * 0.003 + cell.wobblePhase) * (1 - st.t) * 2;
+
+            const grad = disorderCtx.createRadialGradient(st.x, st.y, 2, st.x, st.y, st.r + pulse);
+            grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.85)`);
+            grad.addColorStop(0.7, `rgba(${Math.max(0, r - 30)}, ${Math.max(0, g - 20)}, ${Math.max(0, b - 10)}, 0.6)`);
+            grad.addColorStop(1, `rgba(${Math.max(0, r - 50)}, ${Math.max(0, g - 40)}, ${Math.max(0, b - 20)}, 0.25)`);
+
+            disorderCtx.fillStyle = grad;
+            disorderCtx.strokeStyle = `rgba(${Math.min(255, r + 50)}, ${Math.min(255, g + 50)}, ${Math.min(255, b + 50)}, 0.65)`;
+            disorderCtx.lineWidth = 1.2;
+
+            disorderCtx.beginPath();
+            if (st.t < 0.8) {
+              // Deformed pleomorphic cancer shape
+              const pts = 8;
+              for (let p = 0; p < pts; p++) {
+                const ang = (p / pts) * Math.PI * 2;
+                const offset = Math.sin(ang * 3 + cell.wobblePhase) * irregular;
+                const rad = st.r + pulse + offset;
+                const px = st.x + Math.cos(ang) * rad;
+                const py = st.y + Math.sin(ang) * rad;
+                if (p === 0) disorderCtx.moveTo(px, py);
+                else disorderCtx.lineTo(px, py);
+              }
+              disorderCtx.closePath();
+            } else {
+              // Restored spherical shape
+              disorderCtx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+            }
+            disorderCtx.fill();
+            disorderCtx.stroke();
+
+            // Optogenetic Light-Gated Channel Nodes on membrane
+            if (optoEnabled && factor > 0.12 && factor < 0.92) {
+              disorderCtx.fillStyle = "#22d3ee";
+              disorderCtx.shadowColor = "#06b6d4";
+              disorderCtx.shadowBlur = 6;
+              for (let ch = 0; ch < 3; ch++) {
+                const chAngle = (ch / 3) * Math.PI * 2 + (timestamp * 0.002);
+                const chX = st.x + Math.cos(chAngle) * st.r;
+                const chY = st.y + Math.sin(chAngle) * st.r;
+                disorderCtx.beginPath();
+                disorderCtx.arc(chX, chY, 1.8, 0, Math.PI * 2);
+                disorderCtx.fill();
+              }
+            }
+
+            // Nucleus: Hyperchromatic/Enlarged in cancer, neat in healthy
+            const nucRadius = st.r * (0.62 - st.t * 0.24);
+            const nucR = Math.round(254 + (236 - 254) * st.t);
+            const nucG = Math.round(202 + (253 - 202) * st.t);
+            const nucB = Math.round(202 + (245 - 202) * st.t);
+
+            disorderCtx.fillStyle = `rgb(${nucR}, ${nucG}, ${nucB})`;
+            disorderCtx.shadowColor = `rgb(${r}, ${g}, ${b})`;
+            disorderCtx.shadowBlur = (1 - st.t) * 8 + 3;
+            disorderCtx.beginPath();
+            disorderCtx.arc(st.x, st.y, nucRadius, 0, Math.PI * 2);
+            disorderCtx.fill();
+            disorderCtx.restore();
+          }
+        }
+
+        // Restored lumen center label
+        if (factor > 0.8) {
+          disorderCtx.save();
+          disorderCtx.font = "11px ui-monospace, SFMono-Regular, monospace";
+          disorderCtx.fillStyle = `rgba(110, 231, 183, ${(factor - 0.8) * 5})`;
+          disorderCtx.textAlign = "center";
+          disorderCtx.fillText("LUMEN RECONSTITUTED", cx, cy + 4);
+          disorderCtx.restore();
+        }
+      }
+
+      // Update UI and textual explanations
+      function updateUI(val) {
+        currentProgress = val;
+        const factor = val / 100;
+        const qStr = factor.toFixed(2);
+
+        headerOrderMetric.innerText = `q = ${qStr}`;
+        metricQ.innerText = qStr;
+
+        const adhesionVal = Math.round(8 + factor * 92);
+        metricAdhesion.innerText = `${adhesionVal}%`;
+
+        const frustrationVal = Math.round((1 - factor) * 100);
+        metricFrustration.innerText = `${frustrationVal}%`;
+
+        // Find current stage
+        let stage = STAGES[0];
+        for (let i = 0; i < STAGES.length; i++) {
+          if (val >= STAGES[i].min) stage = STAGES[i];
+        }
+
+        stageTitle.innerText = stage.title;
+        stageTitle.style.color = stage.color;
+
+        panelSubheading.innerText = stage.subheading;
+        panelSubheading.style.color = stage.color;
+        panelDescription.innerText = stage.desc;
+        explanationPanel.style.borderColor = stage.color + "55";
+
+        rightTitleText.innerText = stage.rightTitle;
+        rightTitleText.style.color = stage.color;
+        rightSubtitleText.innerText = stage.rightSub;
+
+        rightStatusDot.style.background = stage.color;
+        rightStatusDot.style.boxShadow = `0 0 8px ${stage.color}`;
+
+        rightEntropyTag.innerText = stage.tag;
+        rightEntropyTag.style.color = stage.color;
+        rightEntropyTag.style.borderColor = stage.color + "55";
+        rightEntropyTag.style.background = stage.color + "18";
+
+        rightCard.style.borderColor = stage.color + "55";
+        rightOverlayBadge.innerText = stage.overlayText;
+        rightOverlayBadge.style.color = stage.color;
+
+        metricMorph.innerText = stage.morph;
+        metricMorph.style.color = stage.color;
+        metricQ.style.color = stage.color;
+        metricAdhesion.style.color = stage.color;
+        metricFrustration.style.color = stage.color;
+      }
+
+      // Animation & Interaction Handlers
+      function stopPlay() {
+        isPlaying = false;
+        playText.innerText = "Simulate Restoration";
+        playIcon.innerText = "▶";
+        playBtn.className = "btn-primary";
+      }
+
+      playBtn.addEventListener('click', function() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+          playText.innerText = "Pause Simulation";
+          playIcon.innerText = "⏸";
+          playBtn.style.background = "#f59e0b";
+          if (currentProgress >= 100) {
+            slider.value = 0;
+            updateUI(0);
+          }
+        } else {
+          stopPlay();
+        }
+      });
+
+      resetBtn.addEventListener('click', function() {
+        stopPlay();
+        slider.value = 0;
+        updateUI(0);
+        initGeometry();
+      });
+
+      optoToggleBtn.addEventListener('click', function() {
+        optoEnabled = !optoEnabled;
+        if (optoEnabled) {
+          optoBtnText.innerText = "Optogenetic Pulse: ON (470nm)";
+          optoToggleBtn.classList.add('active');
+        } else {
+          optoBtnText.innerText = "Optogenetic Pulse: OFF";
+          optoToggleBtn.classList.remove('active');
+        }
+      });
+
+      slider.addEventListener('input', function(e) {
+        if (isPlaying) stopPlay();
+        updateUI(parseFloat(e.target.value));
+      });
+
+      // Master Render Loop
+      let lastTime = 0;
+      function renderLoop(time) {
+        if (!lastTime) lastTime = time;
+        const dt = time - lastTime;
+        lastTime = time;
+
+        if (isPlaying) {
+          let nextVal = parseFloat(slider.value) + 0.28 * (dt / 16);
+          if (nextVal >= 100) {
+            nextVal = 100;
+            slider.value = 100;
+            updateUI(100);
+            stopPlay();
+          } else {
+            slider.value = nextVal;
+            updateUI(nextVal);
+          }
+        }
+
+        const factor = parseFloat(slider.value) / 100;
+        drawHealthy(time);
+        drawDisorder(factor, time);
+
+        animationFrameId = requestAnimationFrame(renderLoop);
+      }
+
+      // Safe Double-Initialization (DOMContentLoaded + window.onload)
+      function initApp() {
+        setupCanvasResolution();
+        updateUI(0);
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(renderLoop);
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', initApp);
+      window.addEventListener('load', initApp);
+      window.addEventListener('resize', () => {
+        setupCanvasResolution();
+      });
+
+      // Immediate trigger fallback in case document is already parsed
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(initApp, 10);
+      }
+    })();
+  </script>
+</body>
+</html>
