@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Oncology & Biophysics Systems Simulator</title>
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: #0f141f;
+      --card-border: #1e293b;
+      --accent-cyan: #38bdf8;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+      --accent-amber: #fbbf24;
+      --accent-rose: #f43f5e;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); padding: 20px; line-height: 1.5; }
+    .header { text-align: center; margin-bottom: 24px; }
+    .header h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+    .header p { color: var(--text-muted); font-size: 0.95rem; max-width: 850px; margin: 0 auto; }
+
+    /* Control Panel */
+    .control-deck { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px 24px; margin-bottom: 20px; }
+    .slider-row { display: flex; align-items: center; gap: 20px; margin-bottom: 12px; }
+    .slider-row label { font-weight: 700; font-size: 0.9rem; min-width: 170px; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; }
+    .slider-input { flex-grow: 1; accent-color: var(--accent-cyan); height: 8px; cursor: pointer; }
+    .metric-value { font-weight: 800; min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; color: var(--accent-green); }
+    
+    .status-banner { font-size: 0.95rem; padding: 10px 16px; border-radius: 8px; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-cyan); color: #e2e8f0; margin-bottom: 14px; }
+    
+    /* Actuator Toggles */
+    .toggles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+    .toggle-btn { background: #131b2c; border: 1px solid #23304a; color: var(--text-muted); padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; }
+    .toggle-btn:hover { border-color: #3b82f6; color: #fff; }
+    .toggle-btn.active { background: rgba(56, 189, 248, 0.15); border-color: var(--accent-cyan); color: #fff; font-weight: 600; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+    .toggle-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: #1e293b; }
+    .toggle-btn.active .toggle-badge { background: var(--accent-cyan); color: #000; }
+
+    /* Canvas Grid */
+    .viewport-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media(max-width: 900px) { .viewport-grid { grid-template-columns: 1fr; } }
+    .canvas-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+    .card-title { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: #0c1019; border-bottom: 1px solid var(--card-border); font-size: 0.85rem; font-weight: 700; }
+    .card-title .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+    .tag-healthy { background: rgba(52, 211, 153, 0.2); color: var(--accent-green); }
+    .tag-dynamic { background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); }
+    .canvas-wrap { position: relative; width: 100%; height: 420px; background: #05070b; }
+    canvas { width: 100%; height: 100%; display: block; }
+    
+    /* Telemetry */
+    .metrics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; padding: 12px 18px; background: #0c1019; border-top: 1px solid var(--card-border); font-size: 0.75rem; }
+    .metric-item span { display: block; color: var(--text-muted); font-size: 0.7rem; }
+    .metric-item strong { font-size: 0.9rem; color: #fff; }
+
+    /* Scientific Knowledge Base */
+    .pillars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+    .pillar-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px; font-size: 0.82rem; }
+    .pillar-card h4 { font-size: 0.9rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .pillar-card p { color: var(--text-muted); line-height: 1.45; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+    .badge-nobel { background: #3b2707; color: #f59e0b; border: 1px solid #78350f; }
+    .badge-new { background: #064e3b; color: #34d399; border: 1px solid #047857; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Unified Systems Oncology & Biophysics Simulator</h1>
+    <p>Simulating the physical, epigenetic, proteasomal, and immunological restoration of disordered metastatic networks through 15 integrated scientific breakthroughs.</p>
+  </div>
+
+  <div class="control-deck">
+    <div class="slider-row">
+      <label for="stateSlider">Systems Reversion ($q$)</label>
+      <input type="range" id="stateSlider" class="slider-input" min="0" max="100" value="0">
+      <div class="metric-value" id="orderMetric">q = 0.00</div>
+    </div>
+    <div class="status-banner" id="statusDesc">
+      Phase 0: Chaotic Disordered Malignancy. High Shannon entropy, shattered contact inhibition, and aberrant oncoprotein signaling dominate.
+    </div>
+
+    <!-- 15 Molecular Actuators -->
+    <div class="toggles-grid">
+      <button class="toggle-btn active" data-actuator="protac"><span class="btn-name">Glutarimide PROTACs</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="liquidBiopsy"><span class="btn-name">MCED Liquid Biopsy</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="adaptiveEco"><span class="btn-name">Adaptive Eco-Dosing</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="logicCart"><span class="btn-name">Logic-Gated CAR-T</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="optogenetics"><span class="btn-name">Optogenetics (2026)</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="treg"><span class="btn-name">FOXP3/Treg Tuner (2025)</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="mrna"><span class="btn-name">Neoantigen mRNA (2023)</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="crispr"><span class="btn-name">CRISPR Editing (2020)</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="checkpoint"><span class="btn-name">Anti-PD-1 (2018)</span><span class="toggle-badge">ON</span></button>
+      <button class="toggle-btn active" data-actuator="repair"><span class="btn-name">DNA Repair Toolkits (2015)</span><span class="toggle-badge">ON</span></button>
+    </div>
+  </div>
+
+  <div class="viewport-grid">
+    <!-- Left Pane -->
+    <div class="canvas-card">
+      <div class="card-title">
+        <span>LEFT PANE: HEALTHY TARGET ARCHITECTURE</span>
+        <span class="tag tag-healthy">Ground State (q = 1.00)</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="healthyCanvas" width="600" height="420"></canvas>
+      </div>
+      <div class="metrics-bar">
+        <div class="metric-item"><span>Polarity Index</span><strong>1.00 (Radial)</strong></div>
+        <div class="metric-item"><span>E-Cadherin Tight Junctions</span><strong>Active (100%)</strong></div>
+        <div class="metric-item"><span>Proteome Homeostasis</span><strong>Normal Proteasome</strong></div>
+        <div class="metric-item"><span>Basal Lumen</span><strong>Preserved</strong></div>
+      </div>
+    </div>
+
+    <!-- Right Pane -->
+    <div class="canvas-card">
+      <div class="card-title">
+        <span>RIGHT PANE: TARGET RESECTION & TISSUE RESTORATION</span>
+        <span class="tag tag-dynamic" id="dynamicTag">Cancer Soup (q = 0.00)</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="dynamicCanvas" width="600" height="420"></canvas>
+      </div>
+      <div class="metrics-bar">
+        <div class="metric-item"><span>Parisi Order ($q$)</span><strong id="qVal">0.00</strong></div>
+        <div class="metric-item"><span>Shannon Entropy ($H$)</span><strong id="hVal">4.28 bits</strong></div>
+        <div class="metric-item"><span>Target Oncoprotein Lysis</span><strong id="protacVal">0%</strong></div>
+        <div class="metric-item"><span>Immune Evasion</span><strong id="immuneVal">High (Active)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integrated Scientific Pillars -->
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <h4><span class="badge badge-new">New Discovery</span> Glutarimide PROTACs (Russian Science Foundation / SPbU)</h4>
+      <p>Targeted protein degradation chimeras using non-toxic glutarimide-sulfur ligands. They couple oncogenic driver proteins with ubiquitin ligase, tagging them with ubiquitin ("the black spot") for rapid selective destruction by cellular proteasomes.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-new">Systems Oncology</span> Ultra-Early MCED Liquid Biopsies</h4>
+      <p>Continuous cell-free circulating tumor DNA (ctDNA) fragmentomics and methylation profiling. Identifies pre-metastatic micro-seeding to intervene while disease retains full sensitivity to curative surgical and targeted protocols.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-new">Ecosystem Physics</span> Adaptive Evolutionary Eco-Dosing</h4>
+      <p>Mathematical game theory algorithms modulating treatment pressure. By maintaining a stable, drug-sensitive subclone population, aggressive chemoresistant phenotypes are starved of evolutionary selection dominance.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-new">Synthetic Biology</span> Logic-Gated Engineered CAR-T Platforms</h4>
+      <p>Dual-antigen logic gates (e.g., A AND NOT B) engineered onto living immune cell vectors. Ensures maximum cytotoxic degranulation inside the tumor microenvironment while sparing normal parenchymal cells bearing single shared markers.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-nobel">2026 Nobel Medicine</span> Optogenetic Bioelectric Actuators (Deisseroth et al.)</h4>
+      <p>Light-gated ion channels (Channelrhodopsin/Halorhodopsin) repolarizing aberrant cancer transmembrane voltage ($V_m$). Normalizes cellular bioelectric gradients and drives differentiation without chemical toxicity.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-nobel">2025 Nobel Medicine</span> FOXP3 & Regulatory T-Cell Tuning (Brunkow et al.)</h4>
+      <p>Selective depletion of tumor-infiltrating FOXP3+ Tregs, disarming the immunosuppressive localized shield and unleashing endogenous cytotoxic infiltration directly into primary and secondary metastatic niches.</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-nobel">2021 Nobel Physics</span> Spin Glass Disordered Landscapes (Parisi)</h4>
+      <p>Statistical mechanics models showing that chemoresistant states represent frustrated local energy minima. Applying targeted multi-vector perturbations relaxes high-entropy cell states back into low-entropy ground attractors ($q \to 1$).</p>
+    </div>
+
+    <div class="pillar-card">
+      <h4><span class="badge badge-nobel">2020 Nobel Chemistry</span> CRISPR-Cas9 Precision Editing (Charpentier, Doudna)</h4>
+      <p>Programmable ribonucleoprotein complexes that physically target, cut, and repair mutated driver sequences (such as *TP53* or *BRCA* loss-of-function lesions) inside living tissue.</p>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Elements
+      const slider = document.getElementById('stateSlider');
+      const orderMetric = document.getElementById('orderMetric');
+      const statusDesc = document.getElementById('statusDesc');
+      const qVal = document.getElementById('qVal');
+      const hVal = document.getElementById('hVal');
+      const protacVal = document.getElementById('protacVal');
+      const immuneVal = document.getElementById('immuneVal');
+      const dynamicTag = document.getElementById('dynamicTag');
+
+      const hCanvas = document.getElementById('healthyCanvas');
+      const dCanvas = document.getElementById('dynamicCanvas');
+      const hCtx = hCanvas.getContext('2d');
+      const dCtx = dCanvas.getContext('2d');
+
+      // State
+      let progress = 0.0; // 0.0 to 1.0
+      const actuators = {
+        protac: true,
+        liquidBiopsy: true,
+        adaptiveEco: true,
+        logicCart: true,
+        optogenetics: true,
+        treg: true,
+        mrna: true,
+        crispr: true,
+        checkpoint: true,
+        repair: true
+      };
+
+      // Button listeners
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const act = btn.getAttribute('data-actuator');
+          actuators[act] = !actuators[act];
+          btn.classList.toggle('active', actuators[act]);
+          btn.querySelector('.toggle-badge').textContent = actuators[act] ? 'ON' : 'OFF';
+        });
+      });
+
+      // Slider listener
+      slider.addEventListener('input', (e) => {
+        progress = parseFloat(e.target.value) / 100.0;
+        updateUI();
+      });
+
+      function updateUI() {
+        orderMetric.textContent = `q = ${progress.toFixed(2)}`;
+        qVal.textContent = progress.toFixed(2);
+        
+        const entropy = (4.28 * (1.0 - progress) + 0.12 * progress).toFixed(2);
+        hVal.textContent = `${entropy} bits`;
+
+        const degradation = Math.round(progress * 100);
+        protacVal.textContent = `${degradation}%`;
+
+        if (progress < 0.25) {
+          statusDesc.textContent = "Phase 0: Metastatic Disordered Soup. Frustrated oncoprotein signaling, severe aneuploidy, and microenvironmental immune exhaustion.";
+          dynamicTag.textContent = "Disordered Cancer Soup";
+          dynamicTag.className = "tag tag-dynamic";
+          immuneVal.textContent = "High Evasion (PD-L1+)";
+        } else if (progress < 0.65) {
+          statusDesc.textContent = "Phase 1: Targeted Proteolysis & Immune De-cloaking. Glutarimide PROTACs tag driver proteins with ubiquitin; FOXP3/Treg down-regulation invites T-cell infiltration.";
+          dynamicTag.textContent = "Active Resection & Degradation";
+          dynamicTag.className = "tag tag-dynamic";
+          immuneVal.textContent = "Decloaking (50%)";
+        } else if (progress < 0.95) {
+          statusDesc.textContent = "Phase 2: Bioelectric Repolarization & Genomic Realignment. Optogenetic fluxes normalize membrane voltage; CRISPR and repair complexes restore cohesive cell junctions.";
+          dynamicTag.textContent = "Attractor Convergence";
+          dynamicTag.className = "tag tag-dynamic";
+          immuneVal.textContent = "Clearance Active";
+        } else {
+          statusDesc.textContent = "Phase 3: Restored Architectural Ground State. Radial polar symmetry re-established, open lumen formed, apoptosis pathways operational ($q = 1.00$).";
+          dynamicTag.textContent = "Restored Epithelium";
+          dynamicTag.className = "tag tag-healthy";
+          immuneVal.textContent = "Surveillance Restored";
+        }
+      }
+
+      // Generate cell agents
+      const NUM_CELLS = 48;
+      const cells = [];
+      const centerX = 300, centerY = 210, targetRadius = 120;
+
+      for (let i = 0; i < NUM_CELLS; i++) {
+        const targetAngle = (i / NUM_CELLS) * Math.PI * 2;
+        const targetPosX = centerX + Math.cos(targetAngle) * targetRadius;
+        const targetPosY = centerY + Math.sin(targetAngle) * (targetRadius * 0.75);
+
+        cells.push({
+          targetX: targetPosX,
+          targetY: targetPosY,
+          targetAngle: targetAngle,
+          // Random initial disordered position
+          chaosX: 60 + Math.random() * 480,
+          chaosY: 50 + Math.random() * 320,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5,
+          size: 10 + Math.random() * 8,
+          phase: Math.random() * Math.PI * 2,
+          ubiquitinTags: []
+        });
+      }
+
+      // High-resolution particle animations
+      let tick = 0;
+      function render() {
+        tick++;
+        renderHealthy();
+        renderDynamic();
+        requestAnimationFrame(render);
+      }
+
+      function renderHealthy() {
+        hCtx.fillStyle = '#05070b';
+        hCtx.fillRect(0, 0, 600, 420);
+
+        // Draw basement membrane ring
+        hCtx.beginPath();
+        hCtx.ellipse(centerX, centerY, targetRadius + 18, (targetRadius * 0.75) + 18, 0, 0, Math.PI * 2);
+        hCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+        hCtx.lineWidth = 4;
+        hCtx.setLineDash([6, 6]);
+        hCtx.stroke();
+        hCtx.setLineDash([]);
+
+        // Draw central lumen
+        hCtx.beginPath();
+        hCtx.ellipse(centerX, centerY, targetRadius - 40, (targetRadius * 0.75) - 30, 0, 0, Math.PI * 2);
+        hCtx.fillStyle = '#090d16';
+        hCtx.fill();
+        hCtx.strokeStyle = 'rgba(52, 211, 153, 0.2)';
+        hCtx.lineWidth = 2;
+        hCtx.stroke();
+
+        // Draw organized cells
+        cells.forEach((cell, idx) => {
+          hCtx.save();
+          hCtx.translate(cell.targetX, cell.targetY);
+          hCtx.rotate(cell.targetAngle + Math.PI / 2);
+
+          // Polarized columnar cell
+          hCtx.fillStyle = '#10b981';
+          hCtx.beginPath();
+          hCtx.roundRect(-8, -14, 16, 28, 4);
+          hCtx.fill();
+          hCtx.strokeStyle = '#34d399';
+          hCtx.lineWidth = 1.5;
+          hCtx.stroke();
+
+          // Nucleus (polarized basal)
+          hCtx.beginPath();
+          hCtx.arc(0, 4, 4, 0, Math.PI * 2);
+          hCtx.fillStyle = '#064e3b';
+          hCtx.fill();
+
+          hCtx.restore();
+        });
+      }
+
+      function renderDynamic() {
+        dCtx.fillStyle = '#05070b';
+        dCtx.fillRect(0, 0, 600, 420);
+
+        const q = progress;
+
+        // If q is high, render emerging basement membrane
+        if (q > 0.4) {
+          dCtx.beginPath();
+          dCtx.ellipse(centerX, centerY, targetRadius + 18, (targetRadius * 0.75) + 18, 0, 0, Math.PI * 2);
+          dCtx.strokeStyle = `rgba(56, 189, 248, ${q * 0.5})`;
+          dCtx.lineWidth = 3;
+          dCtx.stroke();
+        }
+
+        // Render cells
+        cells.forEach((cell, i) => {
+          // Update chaotic drift when q is low
+          if (q < 0.9) {
+            cell.chaosX += cell.vx;
+            cell.chaosY += cell.vy;
+            if (cell.chaosX < 40 || cell.chaosX > 560) cell.vx *= -1;
+            if (cell.chaosY < 40 || cell.chaosY > 380) cell.vy *= -1;
+          }
+
+          // Interpolate current position based on q
+          const curX = (1 - q) * cell.chaosX + q * cell.targetX;
+          const curY = (1 - q) * cell.chaosY + q * cell.targetY;
+
+          // Color transitions from pleomorphic malignant red/magenta to organized green
+          const r = Math.round((1 - q) * 239 + q * 16);
+          const g = Math.round((1 - q) * 68 + q * 185);
+          const b = Math.round((1 - q) * 68 + q * 129);
+
+          dCtx.save();
+          dCtx.translate(curX, curY);
+
+          // Angle orientation aligns as q increases
+          const curAngle = (1 - q) * (Math.sin(tick * 0.05 + i) * Math.PI) + q * (cell.targetAngle + Math.PI / 2);
+          dCtx.rotate(curAngle);
+
+          // Shape transitions from irregular blob to organized columnar unit
+          dCtx.beginPath();
+          if (q < 0.5) {
+            dCtx.arc(0, 0, cell.size * (1 - q * 0.3), 0, Math.PI * 2);
+          } else {
+            dCtx.roundRect(-8, -14, 16, 28, 4);
+          }
+          dCtx.fillStyle = `rgb(${r},${g},${b})`;
+          dCtx.fill();
+          dCtx.strokeStyle = `rgba(255,255,255,${0.2 + q * 0.5})`;
+          dCtx.lineWidth = 1.5;
+          dCtx.stroke();
+
+          // Nucleus
+          dCtx.beginPath();
+          dCtx.arc(0, (q > 0.5 ? 4 : 0), 3.5, 0, Math.PI * 2);
+          dCtx.fillStyle = q > 0.5 ? '#064e3b' : '#7f1d1d';
+          dCtx.fill();
+
+          dCtx.restore();
+
+          // Visual effect: Glutarimide PROTAC Ubiquitin "Black Spot" Tagging
+          if (actuators.protac && q > 0.1 && q < 0.85) {
+            if (Math.random() < 0.03) {
+              dCtx.beginPath();
+              dCtx.arc(curX + (Math.random() - 0.5) * 20, curY + (Math.random() - 0.5) * 20, 3, 0, Math.PI * 2);
+              dCtx.fillStyle = '#fbbf24'; // Amber ubiquitin tag
+              dCtx.fill();
+            }
+          }
+
+          // Visual effect: Optogenetic Blue Light repolarization pulse
+          if (actuators.optogenetics && q > 0.3 && q < 0.9) {
+            if (i % 8 === 0) {
+              dCtx.beginPath();
+              dCtx.moveTo(curX, curY);
+              dCtx.lineTo(curX + Math.cos(tick * 0.1 + i) * 25, curY + Math.sin(tick * 0.1 + i) * 25);
+              dCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+              dCtx.lineWidth = 2;
+              dCtx.stroke();
+            }
+          }
+        });
+
+        // Visual effect: Logic-Gated CAR-T Cytotoxic Patrols
+        if (actuators.logicCart && q < 0.7) {
+          const tX = 300 + Math.cos(tick * 0.03) * 180;
+          const tY = 210 + Math.sin(tick * 0.04) * 120;
+          dCtx.beginPath();
+          dCtx.arc(tX, tY, 8, 0, Math.PI * 2);
+          dCtx.fillStyle = '#38bdf8';
+          dCtx.fill();
+          dCtx.strokeStyle = '#ffffff';
+          dCtx.stroke();
+        }
+      }
+
+      // Initialize
+      updateUI();
+      render();
+    })();
+  </script>
+</body>
+</html>
